@@ -900,3 +900,4 @@ def _pre_fit(
             np.dot(y.T, X, out=Xy.T)
 
     return X, y, X_offset, y_offset, X_scale, precompute, Xy
+

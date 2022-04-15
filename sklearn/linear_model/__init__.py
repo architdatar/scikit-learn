@@ -99,4 +99,5 @@ __all__ = [
     "PoissonRegressor",
     "GammaRegressor",
     "TweedieRegressor",
+    #"NonLinearRegression_dummy"
 ]

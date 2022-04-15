@@ -10,7 +10,6 @@ import numbers
 import warnings
 
 #import numpy as np
-import autograd.numpy as np
 
 import scipy.sparse as sp
 from scipy import linalg
@@ -32,6 +31,11 @@ from ..utils._seq_dataset import ArrayDataset32, CSRDataset32
 from ..utils._seq_dataset import ArrayDataset64, CSRDataset64
 from ..utils.validation import check_is_fitted, _check_sample_weight
 from ..utils.fixes import delayed
+
+from scipy.optimize import least_squares
+import autograd.numpy as np
+from autograd import grad
+import scipy
 
 # TODO: bayesian_ridge_regression and bayesian_regression_ard
 # should be squashed into its respective objects.
@@ -396,7 +400,7 @@ class SparseCoefMixin:
         return self
 
 
-class LinearRegression(RegressorMixin, BaseEstimator): #LinearModel
+class NonLinearRegression(RegressorMixin, BaseEstimator): #LinearModel
     """
     Ordinary least squares non-Linear Regression.
 
@@ -525,6 +529,8 @@ class LinearRegression(RegressorMixin, BaseEstimator): #LinearModel
             df_ = self.coef_.shape[0] -1 + X.shape[1]- 1 #model parameters + X values.
             #There is a small problem here. If we only want to consider the errors in certain X values, 
             # we are unnecessarily increasing the degrees of freedom. But this is a niche problem which can be addressed in later versions of the software.  
+
+            #Even for parameters, degrees of freedom are DFE. Same for confidence intervals.
 
         se_confidence = np.sqrt(total_variance)
         return [se_confidence, df_]

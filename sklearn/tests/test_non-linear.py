@@ -7,6 +7,7 @@ from scipy.optimize import least_squares
 
 #from sklearn.linear_model import LinearRegression
 from sklearn.non_linear_model import NonLinearRegression
+import statsmodels.api as sm
 
 np.random.seed(1)
 

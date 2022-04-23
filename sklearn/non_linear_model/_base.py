@@ -1,5 +1,13 @@
 """
-Generalized Non-Linear Models. Something else.
+Generalized Non-Linear Models. 
+Wrapper function around the scipy non-linear regression functionality. 
+In subsequent versions, will enable support for 1. Constrain optimization. 2. sparse matrices, respectively. 
+
+Things to do: 
+1. Make regression summary function inspired by statsmodels. (done)
+2. Clean up code to remove references to unnecessary imports and functions.
+3. Enable generic support for regularization, constraints, and multioutput. 
+4. Write additional tests to ensure that the function works properly.  
 """
 
 # Author: Archit Datar <architdatar@gmail.com>
@@ -36,6 +44,9 @@ from scipy.optimize import least_squares
 import autograd.numpy as np
 from autograd import grad
 import scipy
+import datetime
+from ..metrics import r2_score
+import pandas as pd
 
 # TODO: bayesian_ridge_regression and bayesian_regression_ard
 # should be squashed into its respective objects.
@@ -404,12 +415,13 @@ class NonLinearRegression(RegressorMixin, BaseEstimator): #LinearModel
     """
     Ordinary least squares non-Linear Regression.
 
-
     """
 
     def __init__(self, 
         model,
         p0_length,
+        p0 = None,
+        param_names=None,
         model_kwargs_dict = {},
         least_sq_kwargs_dict = {}, #optional arguments for least sq
         normalize_x = False, 
@@ -421,7 +433,8 @@ class NonLinearRegression(RegressorMixin, BaseEstimator): #LinearModel
         self.p0_length = p0_length
         self.model_kwargs_dict = model_kwargs_dict
         self.least_sq_kwargs_dict = least_sq_kwargs_dict
-
+        self.p0 = p0
+        self.param_names = param_names
 
     def fit(self, X, y, p0 = None):
         """
@@ -432,7 +445,10 @@ class NonLinearRegression(RegressorMixin, BaseEstimator): #LinearModel
             return y - self.model(X, params, **self.model_kwargs_dict)
 
         if p0 is None:
-            p0 = np.repeat(1, self.p0_length)
+            if self.p0 is None:
+                self.p0 = np.repeat(1, self.p0_length)
+        else:
+            self.p0 = p0
 
         res_ls = least_squares(_model_residuals, x0=p0, 
              args=(X, y), 
@@ -444,6 +460,8 @@ class NonLinearRegression(RegressorMixin, BaseEstimator): #LinearModel
         self.fitted_lsq_object = res_ls
         self.dfe = res_ls.fun.shape[0] - res_ls.x.shape[0]
         self.RSS = res_ls.fun.T @ res_ls.fun / self.dfe
+        self.y = y
+        self.X = X
 
         try:
             self.get_parameter_errors()
@@ -462,16 +480,63 @@ class NonLinearRegression(RegressorMixin, BaseEstimator): #LinearModel
         try:
             self.fitted_lsq_object        
         except: 
-            raise NameError("Model wasn't fit successfully. Please fit the model first and then call the function.")
+            raise NameError("Fitted object not found. Please fit the model first and then call the function.")
 
         self.pcov = self.RSS * np.linalg.inv(self.jac.T @ self.jac)
         self.perr = np.sqrt(np.diag(self.pcov))
         #return pcov
 
-    def summarize_fit(self):
+    def summarize_fit(self, side="both", percent_interval=95):
         """
         """
         #Will create this function later, like statsmodels does. 
+
+        n_obs = self.fitted_lsq_object.fun.shape[0]
+        p = self.fitted_lsq_object.x.shape[0] 
+        r_squared = r2_score(self.y, self.predict(self.X))
+        adj_r_squared = 1-(1-r_squared)*(n_obs-1) /(n_obs - p - 1)
+        t_stats = (self.coef_ - 0)/self.perr
+        t_stats_adj = np.copy(t_stats) #New variable to ensure that we set very high values to a number that doesn't give overflow warning. 
+        t_stats_adj[t_stats_adj>50]=50
+
+        print("                 Regression results                ")
+        print("Method: Least squares")
+        print(f"Date: {datetime.date.today()}")
+        print(f"Time: {datetime.datetime.now().strftime('%H:%M:%S')}")
+        print(f"No. observations: {n_obs:.0f}")
+        print(f"Df residuals: {self.dfe:.0f}")
+        print(f"Df models: {p-1:.0f}")
+        print(f"R-squared: {r_squared:.3f}")
+        print(f"Adj. R-squared: {adj_r_squared:.3f}")
+
+        df = pd.DataFrame(columns=["parameter", "coef", "std err", "t", "P>|t|", \
+        ]) #f"[{alpha:.3f}", f"{1-alpha:.3f}]"
+        if self.param_names is None:
+            df["parameter"] = [f"p_{num}" for num in range(self.p0_length)]
+        else:
+            df["parameter"] = self.param_names
+
+        df["coef"] = list(self.coef_)
+        df["std err"] = list(self.perr)
+        df["t"] = list(t_stats)
+        df["P>|t|"] = list(scipy.stats.t.pdf(t_stats_adj, self.dfe))
+
+        if side == "both":
+            significance_level = (1 - percent_interval/100) /2 
+            t_val = scipy.stats.t.ppf(q=1-significance_level, df=self.dfe)
+            df[f"[{significance_level:.3f}"] = self.coef_ - t_val * self.perr
+            df[f"{1-significance_level:.3f}]"] = self.coef_ + t_val * self.perr
+
+        elif side == "lower":
+            significance_level = percent_interval/100
+            t_val = scipy.stats.t.ppf(q=1-significance_level, df=self.dfe)
+            df[f"[{1-significance_level:.3f}"] = self.coef_ - t_val * self.perr
+
+        elif side == "upper":
+            significance_level = percent_interval/100
+            t_val = scipy.stats.t.ppf(q=1-significance_level, df=self.dfe)
+            df[f"{significance_level:.3f}]"] = self.coef_ + t_val * self.perr
+        return df
 
     def predict(self, X):
         """
@@ -550,7 +615,7 @@ class NonLinearRegression(RegressorMixin, BaseEstimator): #LinearModel
             significance_level = (1 - percent_interval/100) /2 
             t_val = scipy.stats.t.ppf(q=1-significance_level, df=self.dfe)
             return [y_hat - t_val * se_confidence, y_hat + t_val * se_confidence]
-        elif side == "upper":
+        elif side == "lower":
             significance_level = percent_interval/100
             t_val = scipy.stats.t.ppf(q=1-significance_level, df=self.dfe)
             return [y_hat - t_val * se_confidence, np.repeat(np.inf, X.shape[0])]

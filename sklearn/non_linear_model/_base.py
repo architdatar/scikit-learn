@@ -1,5 +1,5 @@
 """
-Generalized Non-Linear Models.
+Generalized Non-Linear Models. Will add summary function to it.
 """
 
 # Author: Archit Datar <architdatar@gmail.com>

@@ -105,10 +105,13 @@ def _tested_estimators(type_filter=None):
 @parametrize_with_checks(list(_tested_estimators()))
 def test_estimators(estimator, check, request):
     # Common tests for estimator instances
+    #if estimator.__name__ != "NonLinearRegression": #NonLinearRegression is instantiated for a specific model, so tests that
+    #     #check fitting will fail, since they might check different models. So, we skip these.  
     with ignore_warnings(category=(FutureWarning, ConvergenceWarning, UserWarning)):
         _set_checking_parameters(estimator)
         check(estimator)
-
+    #else:
+    #    pass
 
 def test_check_estimator_generate_only():
     all_instance_gen_checks = check_estimator(LogisticRegression(), generate_only=True)

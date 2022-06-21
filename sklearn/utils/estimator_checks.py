@@ -31,6 +31,7 @@ from ..linear_model import LinearRegression
 from ..linear_model import LogisticRegression
 from ..linear_model import RANSACRegressor
 from ..linear_model import Ridge
+from ..non_linear_model import NonLinearRegression
 
 from ..base import (
     clone,
@@ -410,6 +411,10 @@ def _construct_instance(Estimator):
             # raise additional warning to be shown by pytest
             warnings.warn(msg, SkipTestWarning)
             raise SkipTest(msg)
+    #elif Estimator.__name__ == "NonLinearRegression":
+    #    def _linear_model(X, beta):
+    #        return beta * X 
+    #    estimator = NonLinearRegression(_linear_model, 1)
     else:
         estimator = Estimator()
     return estimator

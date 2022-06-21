@@ -32,14 +32,17 @@ import datetime
 from ..metrics import r2_score
 import pandas as pd
 
+def _linear_model(X, beta):
+    return X @ beta 
+
 class NonLinearRegression(RegressorMixin, BaseEstimator): 
     """
     Ordinary least squares non-Linear Regression.
     """
 
     def __init__(self, 
-        model,
-        p0_length,
+        model=_linear_model,
+        p0_length=2,
         p0 = None,
         param_names=None,
         model_kwargs_dict = {},
@@ -56,7 +59,10 @@ class NonLinearRegression(RegressorMixin, BaseEstimator):
         self.p0 = p0
         self.param_names = param_names
 
-    def fit(self, X, y, p0 = None):
+        #if not "bounds" in self.least_sq_kwargs_dict.keys():
+        #    self.least_sq_kwargs_dict["bounds"] = [tuple([-np.inf for _ in range(3)]), tuple([np.inf for _ in range(3)])]
+
+    def fit(self, X, y, p0=None):
         """
         Fit the non-linear model. 
         """
@@ -66,7 +72,9 @@ class NonLinearRegression(RegressorMixin, BaseEstimator):
 
         if p0 is None:
             if self.p0 is None:
-                self.p0 = np.repeat(1, self.p0_length)
+                #self.p0 = np.repeat(1, self.p0_length)
+                #self.p0 = np.repeat(0, self.p0_length)
+                self.p0 = np.random.random(self.p0_length) #Random initialization. 
         else:
             self.p0 = p0
 

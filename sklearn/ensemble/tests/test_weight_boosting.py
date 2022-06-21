@@ -571,11 +571,7 @@ def test_adaboostregressor_sample_weight():
     ],
 )
 @pytest.mark.parametrize(
-    "model, X, y",
-    [
-        (AdaBoostClassifier, X, y_class),
-        (AdaBoostRegressor, X, y_regr),
-    ],
+    "model, X, y", [(AdaBoostClassifier, X, y_class), (AdaBoostRegressor, X, y_regr),],
 )
 def test_adaboost_params_validation(model, X, y, params, err_type, err_msg):
     """Check input parameter validation in weight boosting."""

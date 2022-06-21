@@ -675,10 +675,7 @@ def test_auto_weight():
         # check that score is better when class='balanced' is set.
         y_pred = clf.fit(X[unbalanced], y[unbalanced]).predict(X)
         clf.set_params(class_weight="balanced")
-        y_pred_balanced = clf.fit(
-            X[unbalanced],
-            y[unbalanced],
-        ).predict(X)
+        y_pred_balanced = clf.fit(X[unbalanced], y[unbalanced],).predict(X)
         assert metrics.f1_score(y, y_pred, average="macro") <= metrics.f1_score(
             y, y_pred_balanced, average="macro"
         )
@@ -1195,8 +1192,7 @@ def test_linear_svc_intercept_scaling():
         msg = (
             "Intercept scaling is %r but needs to be greater than 0."
             " To disable fitting an intercept,"
-            " set fit_intercept=False."
-            % lsvc.intercept_scaling
+            " set fit_intercept=False." % lsvc.intercept_scaling
         )
         with pytest.raises(ValueError, match=msg):
             lsvc.fit(X, Y)
@@ -1314,18 +1310,12 @@ def test_svc_ovr_tie_breaking(SVCClass):
     common_params = dict(
         kernel="rbf", gamma=1e6, random_state=42, decision_function_shape="ovr"
     )
-    svm = SVCClass(
-        break_ties=False,
-        **common_params,
-    ).fit(X, y)
+    svm = SVCClass(break_ties=False, **common_params,).fit(X, y)
     pred = svm.predict(np.c_[xx.ravel(), yy.ravel()])
     dv = svm.decision_function(np.c_[xx.ravel(), yy.ravel()])
     assert not np.all(pred == np.argmax(dv, axis=1))
 
-    svm = SVCClass(
-        break_ties=True,
-        **common_params,
-    ).fit(X, y)
+    svm = SVCClass(break_ties=True, **common_params,).fit(X, y)
     pred = svm.predict(np.c_[xx.ravel(), yy.ravel()])
     dv = svm.decision_function(np.c_[xx.ravel(), yy.ravel()])
     assert np.all(pred == np.argmax(dv, axis=1))

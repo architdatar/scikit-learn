@@ -734,8 +734,7 @@ def test_ecoc_delegate_sparse_base_estimator():
 
     # create an estimator that does not support sparse input
     base_estimator = CheckingClassifier(
-        check_X=check_array,
-        check_X_params={"ensure_2d": True, "accept_sparse": False},
+        check_X=check_array, check_X_params={"ensure_2d": True, "accept_sparse": False},
     )
     ecoc = OutputCodeClassifier(base_estimator, random_state=0)
 

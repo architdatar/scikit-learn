@@ -415,12 +415,7 @@ def test_column_transformer_sparse_array():
 
 def test_column_transformer_list():
     X_list = [[1, float("nan"), "a"], [0, 0, "b"]]
-    expected_result = np.array(
-        [
-            [1, float("nan"), 1, 0],
-            [-1, 0, 0, 1],
-        ]
-    )
+    expected_result = np.array([[1, float("nan"), 1, 0], [-1, 0, 0, 1],])
 
     ct = ColumnTransformer(
         [
@@ -603,11 +598,7 @@ def test_column_transformer_invalid_columns(remainder):
     msg = "X has 3 features, but ColumnTransformer is expecting 2 features as input."
     with pytest.raises(ValueError, match=msg):
         ct.transform(X_array_more)
-    X_array_fewer = np.array(
-        [
-            [0, 1, 2],
-        ]
-    ).T
+    X_array_fewer = np.array([[0, 1, 2],]).T
     err_msg = (
         "X has 1 features, but ColumnTransformer is expecting 2 features as input."
     )
@@ -1712,17 +1703,12 @@ class TransWithNames(Trans):
             ["bycol1__d", "bycol1__c", "bycol2__d"],
         ),
         (
-            [
-                ("bycol1", TransWithNames(), ["b"]),
-                ("bycol2", "drop", ["d"]),
-            ],
+            [("bycol1", TransWithNames(), ["b"]), ("bycol2", "drop", ["d"]),],
             "passthrough",
             ["bycol1__b", "remainder__a", "remainder__c"],
         ),
         (
-            [
-                ("bycol1", TransWithNames(["pca1", "pca2"]), ["a", "b", "d"]),
-            ],
+            [("bycol1", TransWithNames(["pca1", "pca2"]), ["a", "b", "d"]),],
             "passthrough",
             ["bycol1__pca1", "bycol1__pca2", "remainder__c"],
         ),
@@ -1750,25 +1736,14 @@ class TransWithNames(Trans):
                 "remainder__d",
             ],
         ),
+        ([("bycol1", "drop", ["d"]),], "drop", [],),
         (
-            [
-                ("bycol1", "drop", ["d"]),
-            ],
-            "drop",
-            [],
-        ),
-        (
-            [
-                ("bycol1", TransWithNames(), slice(1, 3)),
-            ],
+            [("bycol1", TransWithNames(), slice(1, 3)),],
             "drop",
             ["bycol1__b", "bycol1__c"],
         ),
         (
-            [
-                ("bycol1", TransWithNames(), ["b"]),
-                ("bycol2", "drop", slice(3, 4)),
-            ],
+            [("bycol1", TransWithNames(), ["b"]), ("bycol2", "drop", slice(3, 4)),],
             "passthrough",
             ["bycol1__b", "remainder__a", "remainder__c"],
         ),
@@ -1781,17 +1756,12 @@ class TransWithNames(Trans):
             ["bycol1__d", "bycol1__c", "bycol2__d", "remainder__a", "remainder__b"],
         ),
         (
-            [
-                ("bycol1", TransWithNames(), slice("b", "c")),
-            ],
+            [("bycol1", TransWithNames(), slice("b", "c")),],
             "drop",
             ["bycol1__b", "bycol1__c"],
         ),
         (
-            [
-                ("bycol1", TransWithNames(), ["b"]),
-                ("bycol2", "drop", slice("c", "d")),
-            ],
+            [("bycol1", TransWithNames(), ["b"]), ("bycol2", "drop", slice("c", "d")),],
             "passthrough",
             ["bycol1__b", "remainder__a"],
         ),
@@ -1816,10 +1786,7 @@ def test_verbose_feature_names_out_true(transformers, remainder, expected_names)
     """Check feature_names_out for verbose_feature_names_out=True (default)"""
     pd = pytest.importorskip("pandas")
     df = pd.DataFrame([[1, 2, 3, 4]], columns=["a", "b", "c", "d"])
-    ct = ColumnTransformer(
-        transformers,
-        remainder=remainder,
-    )
+    ct = ColumnTransformer(transformers, remainder=remainder,)
     ct.fit(df)
 
     names = ct.get_feature_names_out()
@@ -1848,17 +1815,12 @@ def test_verbose_feature_names_out_true(transformers, remainder, expected_names)
             ["a", "d"],
         ),
         (
-            [
-                ("bycol1", TransWithNames(), ["b"]),
-                ("bycol2", "drop", ["d"]),
-            ],
+            [("bycol1", TransWithNames(), ["b"]), ("bycol2", "drop", ["d"]),],
             "passthrough",
             ["b", "a", "c"],
         ),
         (
-            [
-                ("bycol1", TransWithNames(["pca1", "pca2"]), ["a", "b", "d"]),
-            ],
+            [("bycol1", TransWithNames(["pca1", "pca2"]), ["a", "b", "d"]),],
             "passthrough",
             ["pca1", "pca2", "c"],
         ),
@@ -1878,26 +1840,14 @@ def test_verbose_feature_names_out_true(transformers, remainder, expected_names)
             "passthrough",
             ["pca0", "pca1", "kpca0", "kpca1", "a", "c", "d"],
         ),
+        ([("bycol1", "drop", ["d"]),], "drop", [],),
         (
-            [
-                ("bycol1", "drop", ["d"]),
-            ],
-            "drop",
-            [],
-        ),
-        (
-            [
-                ("bycol1", TransWithNames(), slice(1, 2)),
-                ("bycol2", "drop", ["d"]),
-            ],
+            [("bycol1", TransWithNames(), slice(1, 2)), ("bycol2", "drop", ["d"]),],
             "passthrough",
             ["b", "a", "c"],
         ),
         (
-            [
-                ("bycol1", TransWithNames(), ["b"]),
-                ("bycol2", "drop", slice(3, 4)),
-            ],
+            [("bycol1", TransWithNames(), ["b"]), ("bycol2", "drop", slice(3, 4)),],
             "passthrough",
             ["b", "a", "c"],
         ),
@@ -1910,18 +1860,12 @@ def test_verbose_feature_names_out_true(transformers, remainder, expected_names)
             ["d", "c", "a", "b"],
         ),
         (
-            [
-                ("bycol1", TransWithNames(), slice("a", "b")),
-                ("bycol2", "drop", ["d"]),
-            ],
+            [("bycol1", TransWithNames(), slice("a", "b")), ("bycol2", "drop", ["d"]),],
             "passthrough",
             ["a", "b", "c"],
         ),
         (
-            [
-                ("bycol1", TransWithNames(), ["b"]),
-                ("bycol2", "drop", slice("c", "d")),
-            ],
+            [("bycol1", TransWithNames(), ["b"]), ("bycol2", "drop", slice("c", "d")),],
             "passthrough",
             ["b", "a"],
         ),
@@ -1948,9 +1892,7 @@ def test_verbose_feature_names_out_false(transformers, remainder, expected_names
     pd = pytest.importorskip("pandas")
     df = pd.DataFrame([[1, 2, 3, 4]], columns=["a", "b", "c", "d"])
     ct = ColumnTransformer(
-        transformers,
-        remainder=remainder,
-        verbose_feature_names_out=False,
+        transformers, remainder=remainder, verbose_feature_names_out=False,
     )
     ct.fit(df)
 
@@ -1964,10 +1906,7 @@ def test_verbose_feature_names_out_false(transformers, remainder, expected_names
     "transformers, remainder, colliding_columns",
     [
         (
-            [
-                ("bycol1", TransWithNames(), ["b"]),
-                ("bycol2", "passthrough", ["b"]),
-            ],
+            [("bycol1", TransWithNames(), ["b"]), ("bycol2", "passthrough", ["b"]),],
             "drop",
             "['b']",
         ),
@@ -1988,10 +1927,7 @@ def test_verbose_feature_names_out_false(transformers, remainder, expected_names
             "['a']",
         ),
         (
-            [
-                ("bycol1", TransWithNames(["a"]), ["b"]),
-                ("bycol2", "drop", ["b"]),
-            ],
+            [("bycol1", TransWithNames(["a"]), ["b"]), ("bycol2", "drop", ["b"]),],
             "passthrough",
             "['a']",
         ),
@@ -2075,9 +2011,7 @@ def test_verbose_feature_names_out_false_errors(
     pd = pytest.importorskip("pandas")
     df = pd.DataFrame([[1, 2, 3, 4]], columns=["a", "b", "c", "d"])
     ct = ColumnTransformer(
-        transformers,
-        remainder=remainder,
-        verbose_feature_names_out=False,
+        transformers, remainder=remainder, verbose_feature_names_out=False,
     )
     ct.fit(df)
 

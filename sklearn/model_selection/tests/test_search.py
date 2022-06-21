@@ -741,9 +741,7 @@ def test_gridsearch_nd():
         return x.shape[1:] == (7, 11)
 
     clf = CheckingClassifier(
-        check_X=check_X,
-        check_y=check_y,
-        methods_to_check=["fit"],
+        check_X=check_X, check_y=check_y, methods_to_check=["fit"],
     )
     grid_search = GridSearchCV(clf, {"foo_param": [1, 2, 3]})
     grid_search.fit(X_4d, y_3d).score(X, y)
@@ -756,8 +754,7 @@ def test_X_as_list():
     y = np.array([0] * 5 + [1] * 5)
 
     clf = CheckingClassifier(
-        check_X=lambda x: isinstance(x, list),
-        methods_to_check=["fit"],
+        check_X=lambda x: isinstance(x, list), methods_to_check=["fit"],
     )
     cv = KFold(n_splits=3)
     grid_search = GridSearchCV(clf, {"foo_param": [1, 2, 3]}, cv=cv)
@@ -771,8 +768,7 @@ def test_y_as_list():
     y = np.array([0] * 5 + [1] * 5)
 
     clf = CheckingClassifier(
-        check_y=lambda x: isinstance(x, list),
-        methods_to_check=["fit"],
+        check_y=lambda x: isinstance(x, list), methods_to_check=["fit"],
     )
     cv = KFold(n_splits=3)
     grid_search = GridSearchCV(clf, {"foo_param": [1, 2, 3]}, cv=cv)
@@ -915,19 +911,8 @@ def test_grid_search_cv_results():
     n_splits = 3
     n_grid_points = 6
     params = [
-        dict(
-            kernel=[
-                "rbf",
-            ],
-            C=[1, 10],
-            gamma=[0.1, 1],
-        ),
-        dict(
-            kernel=[
-                "poly",
-            ],
-            degree=[1, 2],
-        ),
+        dict(kernel=["rbf",], C=[1, 10], gamma=[0.1, 1],),
+        dict(kernel=["poly",], degree=[1, 2],),
     ]
 
     param_keys = ("param_C", "param_degree", "param_gamma", "param_kernel")
@@ -1120,19 +1105,8 @@ def test_grid_search_cv_results_multimetric():
 
     n_splits = 3
     params = [
-        dict(
-            kernel=[
-                "rbf",
-            ],
-            C=[1, 10],
-            gamma=[0.1, 1],
-        ),
-        dict(
-            kernel=[
-                "poly",
-            ],
-            degree=[1, 2],
-        ),
+        dict(kernel=["rbf",], C=[1, 10], gamma=[0.1, 1],),
+        dict(kernel=["poly",], degree=[1, 2],),
     ]
 
     grid_searches = []
@@ -1356,11 +1330,7 @@ def test_search_cv_results_none_param():
     cv = KFold()
 
     for est in estimators:
-        grid_search = GridSearchCV(
-            est,
-            est_parameters,
-            cv=cv,
-        ).fit(X, y)
+        grid_search = GridSearchCV(est, est_parameters, cv=cv,).fit(X, y)
         assert_array_equal(grid_search.cv_results_["param_random_state"], [0, None])
 
 
@@ -1369,18 +1339,10 @@ def test_search_cv_timing():
     svc = LinearSVC(random_state=0)
 
     X = [
-        [
-            1,
-        ],
-        [
-            2,
-        ],
-        [
-            3,
-        ],
-        [
-            4,
-        ],
+        [1,],
+        [2,],
+        [3,],
+        [4,],
     ]
     y = [0, 1, 1, 0]
 

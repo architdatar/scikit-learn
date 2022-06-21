@@ -488,7 +488,5 @@ def partial_dependence(
         return Bunch(individual=predictions, values=values)
     else:  # kind='both'
         return Bunch(
-            average=averaged_predictions,
-            individual=predictions,
-            values=values,
+            average=averaged_predictions, individual=predictions, values=values,
         )

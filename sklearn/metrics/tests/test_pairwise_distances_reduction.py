@@ -68,9 +68,7 @@ def _get_metric_params_list(metric: str, n_features: int, seed: int = 1):
 
 def assert_argkmin_results_equality(ref_dist, dist, ref_indices, indices):
     assert_array_equal(
-        ref_indices,
-        indices,
-        err_msg="Query vectors have different neighbors' indices",
+        ref_indices, indices, err_msg="Query vectors have different neighbors' indices",
     )
     assert_allclose(
         ref_dist,
@@ -271,18 +269,11 @@ def test_chunk_size_agnosticism(
     )
 
     ref_dist, ref_indices = PairwiseDistancesReduction.compute(
-        X,
-        Y,
-        parameter,
-        return_distance=True,
+        X, Y, parameter, return_distance=True,
     )
 
     dist, indices = PairwiseDistancesReduction.compute(
-        X,
-        Y,
-        parameter,
-        chunk_size=chunk_size,
-        return_distance=True,
+        X, Y, parameter, chunk_size=chunk_size, return_distance=True,
     )
 
     ASSERT_RESULT[PairwiseDistancesReduction](ref_dist, dist, ref_indices, indices)
@@ -316,10 +307,7 @@ def test_n_threads_agnosticism(
     )
 
     ref_dist, ref_indices = PairwiseDistancesReduction.compute(
-        X,
-        Y,
-        parameter,
-        return_distance=True,
+        X, Y, parameter, return_distance=True,
     )
 
     with threadpoolctl.threadpool_limits(limits=1, user_api="openmp"):
@@ -395,10 +383,7 @@ def test_strategies_consistency(
     )
 
     ASSERT_RESULT[PairwiseDistancesReduction](
-        dist_par_X,
-        dist_par_Y,
-        indices_par_X,
-        indices_par_Y,
+        dist_par_X, dist_par_Y, indices_par_X, indices_par_Y,
     )
 
 
@@ -535,11 +520,7 @@ def test_pairwise_distances_radius_neighbors(
 @pytest.mark.parametrize("n_features", [5, 10, 100])
 @pytest.mark.parametrize("num_threads", [1, 2, 8])
 def test_sqeuclidean_row_norms(
-    global_random_seed,
-    n_samples,
-    n_features,
-    num_threads,
-    dtype=np.float64,
+    global_random_seed, n_samples, n_features, num_threads, dtype=np.float64,
 ):
     rng = np.random.RandomState(global_random_seed)
     spread = 100

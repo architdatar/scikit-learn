@@ -1,2 +1,6 @@
 1. Tests: some tests fail for NonLinearRegression. 
-2. Include autograd library by default. 
+2. Include autograd library by default.
+3. Write documentation and upload. 
+https://scikit-learn.org/stable/developers/develop.html#rolling-your-own-estimator
+How to debug in general in VS code
+How to debug a pytest

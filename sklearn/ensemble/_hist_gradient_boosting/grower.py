@@ -554,10 +554,8 @@ class TreeGrower:
             smallest_child.histograms = self.histogram_builder.compute_histograms_brute(
                 smallest_child.sample_indices
             )
-            largest_child.histograms = (
-                self.histogram_builder.compute_histograms_subtraction(
-                    node.histograms, smallest_child.histograms
-                )
+            largest_child.histograms = self.histogram_builder.compute_histograms_subtraction(
+                node.histograms, smallest_child.histograms
             )
             self.total_compute_hist_time += time() - tic
 

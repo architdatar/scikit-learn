@@ -190,8 +190,7 @@ def test_load_gzip_compressed_csv_data_with_descr():
 
     expected_data = load_gzip_compressed_csv_data(data_file_name=data_file_name)
     actual_data, descr = load_gzip_compressed_csv_data(
-        data_file_name=data_file_name,
-        descr_file_name=descr_file_name,
+        data_file_name=data_file_name, descr_file_name=descr_file_name,
     )
 
     np.testing.assert_array_equal(actual_data, expected_data)
@@ -241,7 +240,7 @@ def test_load_diabetes_raw():
     diabetes_default = load_diabetes()
 
     np.testing.assert_allclose(
-        scale(diabetes_raw.data) / (442**0.5), diabetes_default.data, atol=1e-04
+        scale(diabetes_raw.data) / (442 ** 0.5), diabetes_default.data, atol=1e-04
     )
 
 

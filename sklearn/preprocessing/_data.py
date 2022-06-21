@@ -455,10 +455,7 @@ class MinMaxScaler(_OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
 
         first_pass = not hasattr(self, "n_samples_seen_")
         X = self._validate_data(
-            X,
-            reset=first_pass,
-            dtype=FLOAT_DTYPES,
-            force_all_finite="allow-nan",
+            X, reset=first_pass, dtype=FLOAT_DTYPES, force_all_finite="allow-nan",
         )
 
         data_min = np.nanmin(X, axis=0)
@@ -1483,10 +1480,7 @@ class RobustScaler(_OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
         # at fit, convert sparse matrices to csc for optimized computation of
         # the quantiles
         X = self._validate_data(
-            X,
-            accept_sparse="csc",
-            dtype=FLOAT_DTYPES,
-            force_all_finite="allow-nan",
+            X, accept_sparse="csc", dtype=FLOAT_DTYPES, force_all_finite="allow-nan",
         )
 
         q_min, q_max = self.quantile_range
@@ -2558,15 +2552,13 @@ class QuantileTransformer(_OneToOneFeatureMixin, TransformerMixin, BaseEstimator
         if self.n_quantiles <= 0:
             raise ValueError(
                 "Invalid value for 'n_quantiles': %d. "
-                "The number of quantiles must be at least one."
-                % self.n_quantiles
+                "The number of quantiles must be at least one." % self.n_quantiles
             )
 
         if self.subsample <= 0:
             raise ValueError(
                 "Invalid value for 'subsample': %d. "
-                "The number of subsamples must be at least one."
-                % self.subsample
+                "The number of subsamples must be at least one." % self.subsample
             )
 
         if self.n_quantiles > self.subsample:

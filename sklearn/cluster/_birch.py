@@ -328,7 +328,7 @@ class _CFSubcluster:
         #   r^2 = sum_i ||x_i||^2 / n - ||c||^2
         sq_radius = new_ss / new_n - new_sq_norm
 
-        if sq_radius <= threshold**2:
+        if sq_radius <= threshold ** 2:
             (
                 self.n_samples_,
                 self.linear_sum_,
@@ -537,10 +537,7 @@ class Birch(
         )
         if isinstance(self.n_clusters, numbers.Number):
             check_scalar(
-                self.n_clusters,
-                "n_clusters",
-                target_type=numbers.Integral,
-                min_val=1,
+                self.n_clusters, "n_clusters", target_type=numbers.Integral, min_val=1,
             )
 
         # TODO: Remove deprecated flags in 1.2

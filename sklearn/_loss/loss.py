@@ -150,12 +150,7 @@ class BaseLoss:
         return self.interval_y_pred.includes(y)
 
     def loss(
-        self,
-        y_true,
-        raw_prediction,
-        sample_weight=None,
-        loss_out=None,
-        n_threads=1,
+        self, y_true, raw_prediction, sample_weight=None, loss_out=None, n_threads=1,
     ):
         """Compute the pointwise loss value for each input.
 
@@ -616,8 +611,7 @@ class PinballLoss(BaseLoss):
             include_boundaries="neither",
         )
         super().__init__(
-            closs=CyPinballLoss(quantile=float(quantile)),
-            link=IdentityLink(),
+            closs=CyPinballLoss(quantile=float(quantile)), link=IdentityLink(),
         )
         self.approx_hessian = True
         self.constant_hessian = sample_weight is None
@@ -740,8 +734,7 @@ class HalfTweedieLoss(BaseLoss):
             max_val=np.inf,
         )
         super().__init__(
-            closs=CyHalfTweedieLoss(power=float(power)),
-            link=LogLink(),
+            closs=CyHalfTweedieLoss(power=float(power)), link=LogLink(),
         )
         if self.closs.power <= 0:
             self.interval_y_true = Interval(-np.inf, np.inf, False, False)
@@ -801,8 +794,7 @@ class HalfTweedieLossIdentity(BaseLoss):
 
     def __init__(self, sample_weight=None, power=1.5):
         super().__init__(
-            closs=CyHalfTweedieLossIdentity(power=float(power)),
-            link=IdentityLink(),
+            closs=CyHalfTweedieLossIdentity(power=float(power)), link=IdentityLink(),
         )
         if self.closs.power <= 0:
             self.interval_y_true = Interval(-np.inf, np.inf, False, False)
@@ -846,9 +838,7 @@ class HalfBinomialLoss(BaseLoss):
 
     def __init__(self, sample_weight=None):
         super().__init__(
-            closs=CyHalfBinomialLoss(),
-            link=LogitLink(),
-            n_classes=2,
+            closs=CyHalfBinomialLoss(), link=LogitLink(), n_classes=2,
         )
         self.interval_y_true = Interval(0, 1, True, True)
 
@@ -920,9 +910,7 @@ class HalfMultinomialLoss(BaseLoss):
 
     def __init__(self, sample_weight=None, n_classes=3):
         super().__init__(
-            closs=CyHalfMultinomialLoss(),
-            link=MultinomialLogit(),
-            n_classes=n_classes,
+            closs=CyHalfMultinomialLoss(), link=MultinomialLogit(), n_classes=n_classes,
         )
         self.interval_y_true = Interval(0, np.inf, True, False)
         self.interval_y_pred = Interval(0, 1, False, False)

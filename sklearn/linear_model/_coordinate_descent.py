@@ -177,7 +177,7 @@ def _alpha_grid(
         if normalize:
             Xy /= X_scale[:, np.newaxis]
 
-    alpha_max = np.sqrt(np.sum(Xy**2, axis=1)).max() / (n_samples * l1_ratio)
+    alpha_max = np.sqrt(np.sum(Xy ** 2, axis=1)).max() / (n_samples * l1_ratio)
 
     if alpha_max <= np.finfo(float).resolution:
         alphas = np.empty(n_alphas)
@@ -905,10 +905,7 @@ class ElasticNet(MultiOutputMixin, RegressorMixin, LinearModel):
         )
 
         check_scalar(
-            self.alpha,
-            "alpha",
-            target_type=numbers.Real,
-            min_val=0.0,
+            self.alpha, "alpha", target_type=numbers.Real, min_val=0.0,
         )
 
         if self.alpha == 0:
@@ -1448,9 +1445,9 @@ def _path_residuals(
     residues = X_test_coefs - y_test[:, :, np.newaxis]
     residues += intercepts
     if sample_weight is None:
-        this_mse = (residues**2).mean(axis=0)
+        this_mse = (residues ** 2).mean(axis=0)
     else:
-        this_mse = np.average(residues**2, weights=sw_test, axis=0)
+        this_mse = np.average(residues ** 2, weights=sw_test, axis=0)
 
     return this_mse.mean(axis=0)
 
@@ -1713,9 +1710,7 @@ class LinearModelCV(MultiOutputMixin, LinearModel, ABC):
             for train, test in folds
         )
         mse_paths = Parallel(
-            n_jobs=self.n_jobs,
-            verbose=self.verbose,
-            prefer="threads",
+            n_jobs=self.n_jobs, verbose=self.verbose, prefer="threads",
         )(jobs)
         mse_paths = np.reshape(mse_paths, (n_l1_ratio, len(folds), -1))
         # The mean is computed over folds.

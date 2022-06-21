@@ -31,18 +31,14 @@ def random_X_y_coef(
     rng = np.random.RandomState(seed)
     n_dof = n_features + linear_model_loss.fit_intercept
     X = make_low_rank_matrix(
-        n_samples=n_samples,
-        n_features=n_features,
-        random_state=rng,
+        n_samples=n_samples, n_features=n_features, random_state=rng,
     )
 
     if linear_model_loss.base_loss.is_multiclass:
         n_classes = linear_model_loss.base_loss.n_classes
         coef = np.empty((n_classes, n_dof))
         coef.flat[:] = rng.uniform(
-            low=coef_bound[0],
-            high=coef_bound[1],
-            size=n_classes * n_dof,
+            low=coef_bound[0], high=coef_bound[1], size=n_classes * n_dof,
         )
         if linear_model_loss.fit_intercept:
             raw_prediction = X @ coef[:, :-1].T + coef[:, -1]
@@ -61,11 +57,7 @@ def random_X_y_coef(
         y = choice_vectorized(np.arange(n_classes), p=proba).astype(np.float64)
     else:
         coef = np.empty((n_dof,))
-        coef.flat[:] = rng.uniform(
-            low=coef_bound[0],
-            high=coef_bound[1],
-            size=n_dof,
-        )
+        coef.flat[:] = rng.uniform(low=coef_bound[0], high=coef_bound[1], size=n_dof,)
         if linear_model_loss.fit_intercept:
             raw_prediction = X @ coef[:-1] + coef[-1]
         else:

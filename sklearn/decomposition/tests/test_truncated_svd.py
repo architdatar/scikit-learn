@@ -48,12 +48,7 @@ def test_attributes(n_components, X_sparse):
 
 
 @pytest.mark.parametrize(
-    "algorithm, n_components",
-    [
-        ("arpack", 55),
-        ("arpack", 56),
-        ("randomized", 56),
-    ],
+    "algorithm, n_components", [("arpack", 55), ("arpack", 56), ("randomized", 56),],
 )
 def test_too_many_components(X_sparse, algorithm, n_components):
     tsvd = TruncatedSVD(n_components=n_components, algorithm=algorithm)
@@ -109,8 +104,7 @@ def test_explained_variance(X_sparse, kind, n_components, solver):
     true_explained_variance_ratio = variances / total_variance
 
     assert_allclose(
-        svd.explained_variance_ratio_,
-        true_explained_variance_ratio,
+        svd.explained_variance_ratio_, true_explained_variance_ratio,
     )
 
 
@@ -146,14 +140,14 @@ def test_singular_values_consistency(solver):
     # Compare to the Frobenius norm
     X_pca = pca.transform(X)
     assert_allclose(
-        np.sum(pca.singular_values_**2.0),
+        np.sum(pca.singular_values_ ** 2.0),
         np.linalg.norm(X_pca, "fro") ** 2.0,
         rtol=1e-2,
     )
 
     # Compare to the 2-norms of the score vectors
     assert_allclose(
-        pca.singular_values_, np.sqrt(np.sum(X_pca**2.0, axis=0)), rtol=1e-2
+        pca.singular_values_, np.sqrt(np.sum(X_pca ** 2.0, axis=0)), rtol=1e-2
     )
 
 
@@ -169,7 +163,7 @@ def test_singular_values_expected(solver):
     pca = TruncatedSVD(n_components=3, algorithm=solver, random_state=rng)
     X_pca = pca.fit_transform(X)
 
-    X_pca /= np.sqrt(np.sum(X_pca**2.0, axis=0))
+    X_pca /= np.sqrt(np.sum(X_pca ** 2.0, axis=0))
     X_pca[:, 0] *= 3.142
     X_pca[:, 1] *= 2.718
 

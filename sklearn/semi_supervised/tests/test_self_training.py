@@ -191,8 +191,7 @@ def test_prefitted_throws_error():
     knn.fit(X_train, y_train)
     st = SelfTrainingClassifier(knn)
     with pytest.raises(
-        NotFittedError,
-        match="This SelfTrainingClassifier instance is not fitted yet",
+        NotFittedError, match="This SelfTrainingClassifier instance is not fitted yet",
     ):
         st.predict(X_train)
 

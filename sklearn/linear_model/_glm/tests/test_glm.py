@@ -97,35 +97,15 @@ def test_glm_solver_argument(solver):
             "max_iter must be an instance of int, not float",
         ),
         ({"alpha": -1}, ValueError, "alpha == -1, must be >= 0.0"),
-        (
-            {"alpha": "1"},
-            TypeError,
-            "alpha must be an instance of float, not str",
-        ),
+        ({"alpha": "1"}, TypeError, "alpha must be an instance of float, not str",),
         ({"tol": -1.0}, ValueError, "tol == -1.0, must be > 0."),
         ({"tol": 0.0}, ValueError, "tol == 0.0, must be > 0.0"),
         ({"tol": 0}, ValueError, "tol == 0, must be > 0.0"),
-        (
-            {"tol": "1"},
-            TypeError,
-            "tol must be an instance of float, not str",
-        ),
-        (
-            {"tol": [1e-3]},
-            TypeError,
-            "tol must be an instance of float, not list",
-        ),
+        ({"tol": "1"}, TypeError, "tol must be an instance of float, not str",),
+        ({"tol": [1e-3]}, TypeError, "tol must be an instance of float, not list",),
         ({"verbose": -1}, ValueError, "verbose == -1, must be >= 0."),
-        (
-            {"verbose": "1"},
-            TypeError,
-            "verbose must be an instance of int, not str",
-        ),
-        (
-            {"verbose": 1.0},
-            TypeError,
-            "verbose must be an instance of int, not float",
-        ),
+        ({"verbose": "1"}, TypeError, "verbose must be an instance of int, not str",),
+        ({"verbose": 1.0}, TypeError, "verbose must be an instance of int, not float",),
     ],
 )
 def test_glm_scalar_argument(Estimator, params, err_type, err_msg):
@@ -170,11 +150,7 @@ def test_glm_identity_regression(fit_intercept):
     coef = [1.0, 2.0]
     X = np.array([[1, 1, 1, 1, 1], [0, 1, 2, 3, 4]]).T
     y = np.dot(X, coef)
-    glm = _GeneralizedLinearRegressor(
-        alpha=0,
-        fit_intercept=fit_intercept,
-        tol=1e-12,
-    )
+    glm = _GeneralizedLinearRegressor(alpha=0, fit_intercept=fit_intercept, tol=1e-12,)
     if fit_intercept:
         glm.fit(X[:, 1:], y)
         assert_allclose(glm.coef_, coef[1:], rtol=1e-10)
@@ -250,11 +226,7 @@ def test_glm_log_regression(fit_intercept, estimator):
     coef = [0.2, -0.1]
     X = np.array([[0, 1, 2, 3, 4], [1, 1, 1, 1, 1]]).T
     y = np.exp(np.dot(X, coef))
-    glm = clone(estimator).set_params(
-        alpha=0,
-        fit_intercept=fit_intercept,
-        tol=1e-8,
-    )
+    glm = clone(estimator).set_params(alpha=0, fit_intercept=fit_intercept, tol=1e-8,)
     if fit_intercept:
         res = glm.fit(X[:, :-1], y)
         assert_allclose(res.coef_, coef[:-1], rtol=1e-6)
@@ -321,12 +293,9 @@ def test_normal_ridge_comparison(
     else:
         ridge_params = {"solver": "saga", "max_iter": 1000000, "tol": 1e-7}
 
-    (
-        X_train,
-        X_test,
-        y_train,
-        y_test,
-    ) = train_test_split(X, y, test_size=test_size, random_state=0)
+    (X_train, X_test, y_train, y_test,) = train_test_split(
+        X, y, test_size=test_size, random_state=0
+    )
 
     alpha = 1.0
     if sample_weight is None:
@@ -347,10 +316,7 @@ def test_normal_ridge_comparison(
     ridge.fit(X_train, y_train, sample_weight=sw_train)
 
     glm = _GeneralizedLinearRegressor(
-        alpha=alpha,
-        fit_intercept=fit_intercept,
-        max_iter=300,
-        tol=1e-5,
+        alpha=alpha, fit_intercept=fit_intercept, max_iter=300, tol=1e-5,
     )
     glm.fit(X_train, y_train, sample_weight=sw_train)
     assert glm.coef_.shape == (X.shape[1],)
@@ -375,12 +341,7 @@ def test_poisson_glmnet():
     # b            0.03741173122
     X = np.array([[-2, -1, 1, 2], [0, 0, 1, 1]]).T
     y = np.array([0, 1, 1, 2])
-    glm = PoissonRegressor(
-        alpha=1,
-        fit_intercept=True,
-        tol=1e-7,
-        max_iter=300,
-    )
+    glm = PoissonRegressor(alpha=1, fit_intercept=True, tol=1e-7, max_iter=300,)
     glm.fit(X, y)
     assert_allclose(glm.intercept_, -0.12889386979, rtol=1e-5)
     assert_allclose(glm.coef_, [0.29019207995, 0.03741173122], rtol=1e-5)

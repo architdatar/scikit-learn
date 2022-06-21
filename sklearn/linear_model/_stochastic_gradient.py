@@ -235,13 +235,9 @@ class BaseSGD(SparseCoefMixin, BaseEstimator, metaclass=ABCMeta):
                 if intercept_init.shape != (1,) and intercept_init.shape != ():
                     raise ValueError("Provided intercept_init does not match dataset.")
                 if one_class:
-                    self.offset_ = intercept_init.reshape(
-                        1,
-                    )
+                    self.offset_ = intercept_init.reshape(1,)
                 else:
-                    self.intercept_ = intercept_init.reshape(
-                        1,
-                    )
+                    self.intercept_ = intercept_init.reshape(1,)
             else:
                 if one_class:
                     self.offset_ = np.zeros(1, dtype=np.float64, order="C")
@@ -1288,8 +1284,7 @@ class SGDClassifier(BaseSGDClassifier):
             raise NotImplementedError(
                 "predict_(log_)proba only supported when"
                 " loss='log' or loss='modified_huber' "
-                "(%r given)"
-                % self.loss
+                "(%r given)" % self.loss
             )
 
     @available_if(_check_proba)

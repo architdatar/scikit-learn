@@ -96,9 +96,7 @@ def configuration(parent_package="", top_path=None):
     )
 
     config.add_extension(
-        "_heap",
-        sources=["_heap.pyx"],
-        libraries=libraries,
+        "_heap", sources=["_heap.pyx"], libraries=libraries,
     )
 
     config.add_extension(

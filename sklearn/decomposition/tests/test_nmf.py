@@ -133,13 +133,7 @@ def test_nmf_fit_nn_output(solver, init, alpha_W, alpha_H):
 def test_nmf_fit_close(solver):
     rng = np.random.mtrand.RandomState(42)
     # Test that the fit is not too far away
-    pnmf = NMF(
-        5,
-        solver=solver,
-        init="nndsvdar",
-        random_state=0,
-        max_iter=600,
-    )
+    pnmf = NMF(5, solver=solver, init="nndsvdar", random_state=0, max_iter=600,)
     X = np.abs(rng.randn(6, 5))
     assert pnmf.fit(X).reconstruction_err_ < 0.1
 
@@ -149,13 +143,7 @@ def test_nmf_transform(solver):
     # Test that NMF.transform returns close values
     rng = np.random.mtrand.RandomState(42)
     A = np.abs(rng.randn(6, 5))
-    m = NMF(
-        solver=solver,
-        n_components=3,
-        init="random",
-        random_state=0,
-        tol=1e-5,
-    )
+    m = NMF(solver=solver, n_components=3, init="random", random_state=0, tol=1e-5,)
     ft = m.fit_transform(A)
     t = m.transform(A)
     assert_array_almost_equal(ft, t, decimal=2)
@@ -181,11 +169,7 @@ def test_nmf_inverse_transform(solver):
     random_state = np.random.RandomState(0)
     A = np.abs(random_state.randn(6, 4))
     m = NMF(
-        solver=solver,
-        n_components=4,
-        init="random",
-        random_state=0,
-        max_iter=1000,
+        solver=solver, n_components=4, init="random", random_state=0, max_iter=1000,
     )
     ft = m.fit_transform(A)
     A_new = m.inverse_transform(ft)
@@ -347,8 +331,8 @@ def _beta_divergence_dense(X, W, H, beta):
         div = X_nonzero / WH_Xnonzero
         res = np.sum(div) - X.size - np.sum(np.log(div))
     else:
-        res = (X_nonzero**beta).sum()
-        res += (beta - 1) * (WH**beta).sum()
+        res = (X_nonzero ** beta).sum()
+        res += (beta - 1) * (WH ** beta).sum()
         res -= beta * (X_nonzero * (WH_Xnonzero ** (beta - 1))).sum()
         res /= beta * (beta - 1)
 
@@ -636,8 +620,8 @@ def test_nmf_decreasing(solver):
                 nmf._beta_divergence(X, W, H, beta_loss)
                 + alpha * l1_ratio * n_features * W.sum()
                 + alpha * l1_ratio * n_samples * H.sum()
-                + alpha * (1 - l1_ratio) * n_features * (W**2).sum()
-                + alpha * (1 - l1_ratio) * n_samples * (H**2).sum()
+                + alpha * (1 - l1_ratio) * n_features * (W ** 2).sum()
+                + alpha * (1 - l1_ratio) * n_samples * (H ** 2).sum()
             )
             if previous_loss is not None:
                 assert previous_loss > loss

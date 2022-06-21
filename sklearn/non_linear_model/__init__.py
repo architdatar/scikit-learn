@@ -10,6 +10,4 @@ The :mod:`sklearn.non_linear_model` module implements a variety of linear models
 
 from ._base import NonLinearRegression
 
-__all__ = [
-    NonLinearRegression
-]
+__all__ = [NonLinearRegression]

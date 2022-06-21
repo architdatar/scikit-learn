@@ -37,12 +37,7 @@ from sklearn.metrics.pairwise import cosine_distances
 
 x = np.linspace(0, 1, 10)
 xx, yy = np.meshgrid(x, x)
-X_2d_grid = np.hstack(
-    [
-        xx.ravel().reshape(-1, 1),
-        yy.ravel().reshape(-1, 1),
-    ]
-)
+X_2d_grid = np.hstack([xx.ravel().reshape(-1, 1), yy.ravel().reshape(-1, 1),])
 
 pytestmark = pytest.mark.filterwarnings(
     "ignore:The PCA initialization in TSNE will change to have the standard deviation",
@@ -390,11 +385,7 @@ def test_too_few_iterations():
 @pytest.mark.filterwarnings("ignore:The default learning rate in TSNE")
 @pytest.mark.parametrize(
     "method, retype",
-    [
-        ("exact", np.asarray),
-        ("barnes_hut", np.asarray),
-        ("barnes_hut", sp.csr_matrix),
-    ],
+    [("exact", np.asarray), ("barnes_hut", np.asarray), ("barnes_hut", sp.csr_matrix),],
 )
 @pytest.mark.parametrize(
     "D, message_regex",
@@ -404,24 +395,14 @@ def test_too_few_iterations():
     ],
 )
 def test_bad_precomputed_distances(method, D, retype, message_regex):
-    tsne = TSNE(
-        metric="precomputed",
-        method=method,
-        init="random",
-        random_state=42,
-    )
+    tsne = TSNE(metric="precomputed", method=method, init="random", random_state=42,)
     with pytest.raises(ValueError, match=message_regex):
         tsne.fit_transform(retype(D))
 
 
 @pytest.mark.filterwarnings("ignore:The default learning rate in TSNE")
 def test_exact_no_precomputed_sparse():
-    tsne = TSNE(
-        metric="precomputed",
-        method="exact",
-        init="random",
-        random_state=42,
-    )
+    tsne = TSNE(metric="precomputed", method="exact", init="random", random_state=42,)
     with pytest.raises(TypeError, match="sparse"):
         tsne.fit_transform(sp.csr_matrix([[0, 5], [5, 0]]))
 
@@ -491,11 +472,7 @@ def test_init_ndarray():
 def test_init_ndarray_precomputed():
     # Initialize TSNE with ndarray and metric 'precomputed'
     # Make sure no FutureWarning is thrown from _fit
-    tsne = TSNE(
-        init=np.zeros((100, 2)),
-        metric="precomputed",
-        learning_rate=50.0,
-    )
+    tsne = TSNE(init=np.zeros((100, 2)), metric="precomputed", learning_rate=50.0,)
     tsne.fit(np.zeros((100, 100)))
 
 

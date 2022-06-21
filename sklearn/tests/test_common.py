@@ -105,13 +105,14 @@ def _tested_estimators(type_filter=None):
 @parametrize_with_checks(list(_tested_estimators()))
 def test_estimators(estimator, check, request):
     # Common tests for estimator instances
-    #if estimator.__name__ != "NonLinearRegression": #NonLinearRegression is instantiated for a specific model, so tests that
-    #     #check fitting will fail, since they might check different models. So, we skip these.  
+    # if estimator.__name__ != "NonLinearRegression": #NonLinearRegression is instantiated for a specific model, so tests that
+    #     #check fitting will fail, since they might check different models. So, we skip these.
     with ignore_warnings(category=(FutureWarning, ConvergenceWarning, UserWarning)):
         _set_checking_parameters(estimator)
         check(estimator)
-    #else:
+    # else:
     #    pass
+
 
 def test_check_estimator_generate_only():
     all_instance_gen_checks = check_estimator(LogisticRegression(), generate_only=True)
@@ -252,16 +253,8 @@ def test_class_support_removed():
 
 def _generate_search_cv_instances():
     for SearchCV, (Estimator, param_grid) in product(
-        [
-            GridSearchCV,
-            HalvingGridSearchCV,
-            RandomizedSearchCV,
-            HalvingGridSearchCV,
-        ],
-        [
-            (Ridge, {"alpha": [0.1, 1.0]}),
-            (LogisticRegression, {"C": [0.1, 1.0]}),
-        ],
+        [GridSearchCV, HalvingGridSearchCV, RandomizedSearchCV, HalvingGridSearchCV,],
+        [(Ridge, {"alpha": [0.1, 1.0]}), (LogisticRegression, {"C": [0.1, 1.0]}),],
     ):
         init_params = signature(SearchCV).parameters
         extra_params = (
@@ -272,12 +265,7 @@ def _generate_search_cv_instances():
         yield search_cv
 
     for SearchCV, (Estimator, param_grid) in product(
-        [
-            GridSearchCV,
-            HalvingGridSearchCV,
-            RandomizedSearchCV,
-            HalvingRandomSearchCV,
-        ],
+        [GridSearchCV, HalvingGridSearchCV, RandomizedSearchCV, HalvingRandomSearchCV,],
         [
             (Ridge, {"ridge__alpha": [0.1, 1.0]}),
             (LogisticRegression, {"logisticregression__C": [0.1, 1.0]}),
@@ -300,12 +288,7 @@ def test_search_cv(estimator, check, request):
     # We have a separate test because those meta-estimators can accept a
     # wide range of base estimators (classifiers, regressors, pipelines)
     with ignore_warnings(
-        category=(
-            FutureWarning,
-            ConvergenceWarning,
-            UserWarning,
-            FitFailedWarning,
-        )
+        category=(FutureWarning, ConvergenceWarning, UserWarning, FitFailedWarning,)
     ):
         check(estimator)
 

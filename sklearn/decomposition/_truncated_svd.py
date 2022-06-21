@@ -209,10 +209,7 @@ class TruncatedSVD(_ClassNamePrefixFeaturesOutMixin, TransformerMixin, BaseEstim
             Reduced version of X. This will always be a dense array.
         """
         check_scalar(
-            self.n_oversamples,
-            "n_oversamples",
-            min_val=1,
-            target_type=Integral,
+            self.n_oversamples, "n_oversamples", min_val=1, target_type=Integral,
         )
 
         X = self._validate_data(X, accept_sparse=["csr", "csc"], ensure_min_features=2)
@@ -230,11 +227,7 @@ class TruncatedSVD(_ClassNamePrefixFeaturesOutMixin, TransformerMixin, BaseEstim
             k = self.n_components
             n_features = X.shape[1]
             check_scalar(
-                k,
-                "n_components",
-                target_type=Integral,
-                min_val=1,
-                max_val=n_features,
+                k, "n_components", target_type=Integral, min_val=1, max_val=n_features,
             )
             U, Sigma, VT = randomized_svd(
                 X,

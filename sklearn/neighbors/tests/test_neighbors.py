@@ -127,7 +127,7 @@ def _weight_func(dist):
     # can be looped
     with np.errstate(divide="ignore"):
         retval = 1.0 / dist
-    return retval**2
+    return retval ** 2
 
 
 WEIGHTS = ["uniform", "distance", _weight_func]
@@ -135,10 +135,7 @@ WEIGHTS = ["uniform", "distance", _weight_func]
 
 @pytest.mark.parametrize(
     "n_samples, n_features, n_query_pts, n_neighbors",
-    [
-        (100, 100, 10, 100),
-        (1000, 5, 100, 1),
-    ],
+    [(100, 100, 10, 100), (1000, 5, 100, 1),],
 )
 @pytest.mark.parametrize("query_is_train", [False, True])
 @pytest.mark.parametrize("metric", COMMON_VALID_METRICS)
@@ -212,11 +209,7 @@ def test_unsupervised_kneighbors(
 
 
 @pytest.mark.parametrize(
-    "n_samples, n_features, n_query_pts",
-    [
-        (100, 100, 10),
-        (1000, 5, 100),
-    ],
+    "n_samples, n_features, n_query_pts", [(100, 100, 10), (1000, 5, 100),],
 )
 @pytest.mark.parametrize("metric", COMMON_VALID_METRICS)
 @pytest.mark.parametrize("n_neighbors, radius", [(1, 100), (50, 500), (100, 1000)])
@@ -579,7 +572,7 @@ def test_kneighbors_classifier(
     # Test k-neighbors classification
     rng = np.random.RandomState(random_state)
     X = 2 * rng.rand(n_samples, n_features).astype(global_dtype, copy=False) - 1
-    y = ((X**2).sum(axis=1) < 0.5).astype(int)
+    y = ((X ** 2).sum(axis=1) < 0.5).astype(int)
     y_str = y.astype(str)
 
     knn = neighbors.KNeighborsClassifier(
@@ -606,7 +599,7 @@ def test_kneighbors_classifier_float_labels(
     # Test k-neighbors classification
     rng = np.random.RandomState(random_state)
     X = 2 * rng.rand(n_samples, n_features).astype(global_dtype, copy=False) - 1
-    y = ((X**2).sum(axis=1) < 0.5).astype(int)
+    y = ((X ** 2).sum(axis=1) < 0.5).astype(int)
 
     knn = neighbors.KNeighborsClassifier(n_neighbors=n_neighbors)
     knn.fit(X, y.astype(float))
@@ -662,7 +655,7 @@ def test_radius_neighbors_classifier(
     # Test radius-based classification
     rng = np.random.RandomState(random_state)
     X = 2 * rng.rand(n_samples, n_features).astype(global_dtype, copy=False) - 1
-    y = ((X**2).sum(axis=1) < radius).astype(int)
+    y = ((X ** 2).sum(axis=1) < radius).astype(int)
     y_str = y.astype(str)
 
     neigh = neighbors.RadiusNeighborsClassifier(
@@ -1049,7 +1042,7 @@ def test_kneighbors_classifier_sparse(
     rng = np.random.RandomState(random_state)
     X = 2 * rng.rand(n_samples, n_features) - 1
     X *= X > 0.2
-    y = ((X**2).sum(axis=1) < 0.5).astype(int)
+    y = ((X ** 2).sum(axis=1) < 0.5).astype(int)
 
     for sparsemat in SPARSE_TYPES:
         knn = neighbors.KNeighborsClassifier(n_neighbors=n_neighbors, algorithm="auto")
@@ -1111,7 +1104,7 @@ def test_kneighbors_regressor(
     # Test k-neighbors regression
     rng = np.random.RandomState(random_state)
     X = 2 * rng.rand(n_samples, n_features) - 1
-    y = np.sqrt((X**2).sum(1))
+    y = np.sqrt((X ** 2).sum(1))
     y /= y.max()
 
     y_target = y[:n_test_pts]
@@ -1160,7 +1153,7 @@ def test_kneighbors_regressor_multioutput(
     # Test k-neighbors in multi-output regression
     rng = np.random.RandomState(random_state)
     X = 2 * rng.rand(n_samples, n_features) - 1
-    y = np.sqrt((X**2).sum(1))
+    y = np.sqrt((X ** 2).sum(1))
     y /= y.max()
     y = np.vstack([y, y]).T
 
@@ -1185,7 +1178,7 @@ def test_radius_neighbors_regressor(
     # Test radius-based neighbors regression
     rng = np.random.RandomState(random_state)
     X = 2 * rng.rand(n_samples, n_features) - 1
-    y = np.sqrt((X**2).sum(1))
+    y = np.sqrt((X ** 2).sum(1))
     y /= y.max()
 
     y_target = y[:n_test_pts]
@@ -1252,7 +1245,7 @@ def test_RadiusNeighborsRegressor_multioutput(
     # Test k-neighbors in multi-output regression with various weight
     rng = np.random.RandomState(random_state)
     X = 2 * rng.rand(n_samples, n_features) - 1
-    y = np.sqrt((X**2).sum(1))
+    y = np.sqrt((X ** 2).sum(1))
     y /= y.max()
     y = np.vstack([y, y]).T
 
@@ -1277,7 +1270,7 @@ def test_kneighbors_regressor_sparse(
     # Like the above, but with various types of sparse matrices
     rng = np.random.RandomState(random_state)
     X = 2 * rng.rand(n_samples, n_features) - 1
-    y = ((X**2).sum(axis=1) < 0.25).astype(int)
+    y = ((X ** 2).sum(axis=1) < 0.25).astype(int)
 
     for sparsemat in SPARSE_TYPES:
         knn = neighbors.KNeighborsRegressor(n_neighbors=n_neighbors, algorithm="auto")
@@ -1615,7 +1608,7 @@ def test_kneighbors_brute_backend(
 
 def test_callable_metric():
     def custom_metric(x1, x2):
-        return np.sqrt(np.sum(x1**2 + x2**2))
+        return np.sqrt(np.sum(x1 ** 2 + x2 ** 2))
 
     X = np.random.RandomState(42).rand(20, 2)
     nbrs1 = neighbors.NearestNeighbors(

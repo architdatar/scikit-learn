@@ -300,10 +300,7 @@ def ward_tree(X, *, connectivity=None, n_clusters=None, return_distance=False):
         # Generator expressions are faster than arrays on the following
         row = [i for i in row if i < ind]
         coord_row.extend(
-            len(row)
-            * [
-                ind,
-            ]
+            len(row) * [ind,]
         )
         coord_col.extend(row)
 

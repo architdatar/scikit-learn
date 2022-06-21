@@ -76,13 +76,7 @@ def test_spectral_clustering(eigen_solver, assign_labels):
 
 def test_spectral_unknown_mode():
     # Test that SpectralClustering fails with an unknown mode set.
-    centers = np.array(
-        [
-            [0.0, 0.0, 0.0],
-            [10.0, 10.0, 10.0],
-            [20.0, 20.0, 20.0],
-        ]
-    )
+    centers = np.array([[0.0, 0.0, 0.0], [10.0, 10.0, 10.0], [20.0, 20.0, 20.0],])
     X, true_labels = make_blobs(
         n_samples=100, centers=centers, cluster_std=1.0, random_state=42
     )
@@ -95,13 +89,7 @@ def test_spectral_unknown_mode():
 
 def test_spectral_unknown_assign_labels():
     # Test that SpectralClustering fails with an unknown assign_labels set.
-    centers = np.array(
-        [
-            [0.0, 0.0, 0.0],
-            [10.0, 10.0, 10.0],
-            [20.0, 20.0, 20.0],
-        ]
-    )
+    centers = np.array([[0.0, 0.0, 0.0], [10.0, 10.0, 10.0], [20.0, 20.0, 20.0],])
     X, true_labels = make_blobs(
         n_samples=100, centers=centers, cluster_std=1.0, random_state=42
     )
@@ -272,10 +260,7 @@ def test_cluster_qr_permutation_invariance():
     n_samples, n_components = 100, 5
     data = random_state.randn(n_samples, n_components)
     perm = random_state.permutation(n_samples)
-    assert np.array_equal(
-        cluster_qr(data)[perm],
-        cluster_qr(data[perm]),
-    )
+    assert np.array_equal(cluster_qr(data)[perm], cluster_qr(data[perm]),)
 
 
 @pytest.mark.parametrize("n_samples", [50, 100, 150, 500])
@@ -321,8 +306,8 @@ def test_spectral_clustering_with_arpack_amg_solvers():
     center1, center2 = (14, 12), (20, 25)
     radius1, radius2 = 8, 7
 
-    circle1 = (x - center1[0]) ** 2 + (y - center1[1]) ** 2 < radius1**2
-    circle2 = (x - center2[0]) ** 2 + (y - center2[1]) ** 2 < radius2**2
+    circle1 = (x - center1[0]) ** 2 + (y - center1[1]) ** 2 < radius1 ** 2
+    circle2 = (x - center2[0]) ** 2 + (y - center2[1]) ** 2 < radius2 ** 2
 
     circles = circle1 | circle2
     mask = circles.copy()

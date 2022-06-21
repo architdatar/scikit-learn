@@ -234,9 +234,7 @@ def test_multilabel_classifier_error(pyplot, response_method):
     msg = "Multi-label and multi-output multi-class classifiers are not supported"
     with pytest.raises(ValueError, match=msg):
         DecisionBoundaryDisplay.from_estimator(
-            tree,
-            X,
-            response_method=response_method,
+            tree, X, response_method=response_method,
         )
 
 
@@ -250,9 +248,7 @@ def test_multi_output_multi_class_classifier_error(pyplot, response_method):
     msg = "Multi-label and multi-output multi-class classifiers are not supported"
     with pytest.raises(ValueError, match=msg):
         DecisionBoundaryDisplay.from_estimator(
-            tree,
-            X,
-            response_method=response_method,
+            tree, X, response_method=response_method,
         )
 
 
@@ -314,8 +310,5 @@ def test_string_target(pyplot):
 
     # Does not raise
     DecisionBoundaryDisplay.from_estimator(
-        log_reg,
-        X,
-        grid_resolution=5,
-        response_method="predict",
+        log_reg, X, grid_resolution=5, response_method="predict",
     )

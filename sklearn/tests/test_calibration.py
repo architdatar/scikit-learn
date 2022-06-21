@@ -565,10 +565,7 @@ def test_calibration_dict_pipeline(dict_data, dict_data_pipeline):
 
 @pytest.mark.parametrize(
     "clf, cv",
-    [
-        pytest.param(LinearSVC(C=1), 2),
-        pytest.param(LinearSVC(C=1), "prefit"),
-    ],
+    [pytest.param(LinearSVC(C=1), 2), pytest.param(LinearSVC(C=1), "prefit"),],
 )
 def test_calibration_attributes(clf, cv):
     # Check that `n_features_in_` and `classes_` attributes created properly
@@ -899,10 +896,7 @@ def test_calibrated_classifier_cv_double_sample_weights_equivalence(method, ense
 
     base_estimator = LogisticRegression()
     calibrated_clf_without_weights = CalibratedClassifierCV(
-        base_estimator,
-        method=method,
-        ensemble=ensemble,
-        cv=2,
+        base_estimator, method=method, ensemble=ensemble, cv=2,
     )
     calibrated_clf_with_weights = clone(calibrated_clf_without_weights)
 
@@ -946,11 +940,7 @@ def test_calibration_with_fit_params(fit_params_type, data):
 
 
 @pytest.mark.parametrize(
-    "sample_weight",
-    [
-        [1.0] * N_SAMPLES,
-        np.ones(N_SAMPLES),
-    ],
+    "sample_weight", [[1.0] * N_SAMPLES, np.ones(N_SAMPLES),],
 )
 def test_calibration_with_sample_weight_base_estimator(sample_weight, data):
     """Tests that sample_weight is passed to the underlying base
@@ -1019,10 +1009,7 @@ def test_calibrated_classifier_cv_zeros_sample_weights_equivalence(method, ensem
 
     base_estimator = LogisticRegression()
     calibrated_clf_without_weights = CalibratedClassifierCV(
-        base_estimator,
-        method=method,
-        ensemble=ensemble,
-        cv=2,
+        base_estimator, method=method, ensemble=ensemble, cv=2,
     )
     calibrated_clf_with_weights = clone(calibrated_clf_without_weights)
 

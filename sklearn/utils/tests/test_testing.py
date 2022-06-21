@@ -759,10 +759,7 @@ def test_memmap_on_contiguous_data(dtype):
     ],
 )
 def test_convert_container(
-    constructor_name,
-    container_type,
-    dtype,
-    superdtype,
+    constructor_name, container_type, dtype, superdtype,
 ):
     """Check that we convert the container to the right type of array with the
     right data type."""
@@ -771,11 +768,7 @@ def test_convert_container(
         # instead of the whole file
         container_type = container_type()
     container = [0, 1]
-    container_converted = _convert_container(
-        container,
-        constructor_name,
-        dtype=dtype,
-    )
+    container_converted = _convert_container(container, constructor_name, dtype=dtype,)
     assert isinstance(container_converted, container_type)
 
     if constructor_name in ("list", "tuple", "index"):

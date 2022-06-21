@@ -708,13 +708,7 @@ def test_plot_partial_dependence_subsampling(
     ],
 )
 def test_partial_dependence_overwrite_labels(
-    plot_partial_dependence,
-    pyplot,
-    clf_diabetes,
-    diabetes,
-    kind,
-    line_kw,
-    label,
+    plot_partial_dependence, pyplot, clf_diabetes, diabetes, kind, line_kw, label,
 ):
     """Test that make sure that we can overwrite the label of the PDP plot"""
     disp = plot_partial_dependence(
@@ -737,10 +731,7 @@ def test_partial_dependence_overwrite_labels(
 
 
 def test_partial_dependence_kind_list(
-    plot_partial_dependence,
-    pyplot,
-    clf_diabetes,
-    diabetes,
+    plot_partial_dependence, pyplot, clf_diabetes, diabetes,
 ):
     """Check that we can provide a list of strings to kind parameter."""
     matplotlib = pytest.importorskip("matplotlib")
@@ -778,12 +769,7 @@ def test_partial_dependence_kind_list(
     ],
 )
 def test_partial_dependence_kind_error(
-    plot_partial_dependence,
-    pyplot,
-    clf_diabetes,
-    diabetes,
-    features,
-    kind,
+    plot_partial_dependence, pyplot, clf_diabetes, diabetes, features, kind,
 ):
     """Check that we raise an informative error when 2-way PD is requested
     together with 1-way PD/ICE"""
@@ -856,9 +842,7 @@ def test_plot_partial_dependence_lines_kw(
 
 
 def test_partial_dependence_display_wrong_len_kind(
-    pyplot,
-    clf_diabetes,
-    diabetes,
+    pyplot, clf_diabetes, diabetes,
 ):
     """Check that we raise an error when `kind` is a list with a wrong length.
 

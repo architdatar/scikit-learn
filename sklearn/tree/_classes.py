@@ -153,10 +153,7 @@ class BaseDecisionTree(MultiOutputMixin, BaseEstimator, metaclass=ABCMeta):
         random_state = check_random_state(self.random_state)
 
         check_scalar(
-            self.ccp_alpha,
-            name="ccp_alpha",
-            target_type=numbers.Real,
-            min_val=0.0,
+            self.ccp_alpha, name="ccp_alpha", target_type=numbers.Real, min_val=0.0,
         )
 
         if check_input:
@@ -962,10 +959,7 @@ class DecisionTreeClassifier(ClassifierMixin, BaseDecisionTree):
         """
 
         super().fit(
-            X,
-            y,
-            sample_weight=sample_weight,
-            check_input=check_input,
+            X, y, sample_weight=sample_weight, check_input=check_input,
         )
         return self
 
@@ -1335,10 +1329,7 @@ class DecisionTreeRegressor(RegressorMixin, BaseDecisionTree):
         """
 
         super().fit(
-            X,
-            y,
-            sample_weight=sample_weight,
-            check_input=check_input,
+            X, y, sample_weight=sample_weight, check_input=check_input,
         )
         return self
 

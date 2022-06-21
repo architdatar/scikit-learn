@@ -74,8 +74,7 @@ def _update_leaves_values(loss, grower, y_true, raw_prediction, sample_weight):
         else:
             sw = sample_weight[indices]
         update = loss.fit_intercept_only(
-            y_true=y_true[indices] - raw_prediction[indices],
-            sample_weight=sw,
+            y_true=y_true[indices] - raw_prediction[indices], sample_weight=sw,
         )
         leaf.value = grower.shrinkage * update
         # Note that the regularization is ignored here
@@ -1803,8 +1802,7 @@ class HistGradientBoostingClassifier(ClassifierMixin, BaseHistGradientBoosting):
                 return _LOSSES["binary_crossentropy"](sample_weight=sample_weight)
             else:
                 return _LOSSES["categorical_crossentropy"](
-                    sample_weight=sample_weight,
-                    n_classes=self.n_trees_per_iteration_,
+                    sample_weight=sample_weight, n_classes=self.n_trees_per_iteration_,
                 )
 
         if self.loss == "categorical_crossentropy":

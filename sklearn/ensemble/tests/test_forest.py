@@ -492,11 +492,7 @@ def test_unfitted_feature_importances(name):
             ),
             0.65,
         ),
-        (
-            iris.data,
-            iris.target * 2 + 1,
-            0.65,
-        ),
+        (iris.data, iris.target * 2 + 1, 0.65,),
         (
             *datasets.make_multilabel_classification(n_samples=300, random_state=0),
             0.18,
@@ -507,16 +503,10 @@ def test_forest_classifier_oob(ForestClassifier, X, y, X_type, lower_bound_accur
     """Check that OOB score is close to score on a test set."""
     X = _convert_container(X, constructor_name=X_type)
     X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=0.5,
-        random_state=0,
+        X, y, test_size=0.5, random_state=0,
     )
     classifier = ForestClassifier(
-        n_estimators=40,
-        bootstrap=True,
-        oob_score=True,
-        random_state=0,
+        n_estimators=40, bootstrap=True, oob_score=True, random_state=0,
     )
 
     assert not hasattr(classifier, "oob_score_")
@@ -563,16 +553,10 @@ def test_forest_regressor_oob(ForestRegressor, X, y, X_type, lower_bound_r2):
     score on a test set."""
     X = _convert_container(X, constructor_name=X_type)
     X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=0.5,
-        random_state=0,
+        X, y, test_size=0.5, random_state=0,
     )
     regressor = ForestRegressor(
-        n_estimators=50,
-        bootstrap=True,
-        oob_score=True,
-        random_state=0,
+        n_estimators=50, bootstrap=True, oob_score=True, random_state=0,
     )
 
     assert not hasattr(regressor, "oob_score_")
@@ -600,10 +584,7 @@ def test_forest_oob_warning(ForestEstimator):
     """Check that a warning is raised when not enough estimator and the OOB
     estimates will be inaccurate."""
     estimator = ForestEstimator(
-        n_estimators=1,
-        oob_score=True,
-        bootstrap=True,
-        random_state=0,
+        n_estimators=1, oob_score=True, bootstrap=True, random_state=0,
     )
     with pytest.warns(UserWarning, match="Some inputs do not have OOB scores"):
         estimator.fit(iris.data, iris.target)
@@ -1256,7 +1237,7 @@ def check_class_weights(name):
 
     # Check that sample_weight and class_weight are multiplicative
     clf1 = ForestClassifier(random_state=0)
-    clf1.fit(iris.data, iris.target, sample_weight**2)
+    clf1.fit(iris.data, iris.target, sample_weight ** 2)
     clf2 = ForestClassifier(class_weight=class_weight, random_state=0)
     clf2.fit(iris.data, iris.target, sample_weight)
     assert_almost_equal(clf1.feature_importances_, clf2.feature_importances_)
@@ -1733,18 +1714,10 @@ def test_little_tree_with_small_max_samples(ForestClass):
     y = rng.randn(10000) > 0
 
     # First fit with no restriction on max samples
-    est1 = ForestClass(
-        n_estimators=1,
-        random_state=rng,
-        max_samples=None,
-    )
+    est1 = ForestClass(n_estimators=1, random_state=rng, max_samples=None,)
 
     # Second fit with max samples restricted to just 2
-    est2 = ForestClass(
-        n_estimators=1,
-        random_state=rng,
-        max_samples=2,
-    )
+    est2 = ForestClass(n_estimators=1, random_state=rng, max_samples=2,)
 
     est1.fit(X, y)
     est2.fit(X, y)
@@ -1810,10 +1783,7 @@ def test_max_features_deprecation(Estimator):
 # TODO: Remove in v1.2
 @pytest.mark.parametrize(
     "old_criterion, new_criterion",
-    [
-        ("mse", "squared_error"),
-        ("mae", "absolute_error"),
-    ],
+    [("mse", "squared_error"), ("mae", "absolute_error"),],
 )
 def test_criterion_deprecated(old_criterion, new_criterion):
     est1 = RandomForestRegressor(criterion=old_criterion, random_state=0)

@@ -148,11 +148,7 @@ def _assert_all_finite(
 
 
 def assert_all_finite(
-    X,
-    *,
-    allow_nan=False,
-    estimator_name=None,
-    input_name="",
+    X, *, allow_nan=False, estimator_name=None, input_name="",
 ):
     """Throw a ValueError if X contains NaN or infinity.
 
@@ -1359,13 +1355,7 @@ def check_non_negative(X, whom):
 
 
 def check_scalar(
-    x,
-    name,
-    target_type,
-    *,
-    min_val=None,
-    max_val=None,
-    include_boundaries="both",
+    x, name, target_type, *, min_val=None, max_val=None, include_boundaries="both",
 ):
     """Validate scalar parameters type and value.
 

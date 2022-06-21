@@ -8,10 +8,7 @@ from sklearn.utils._weight_vector import (
 
 @pytest.mark.parametrize(
     "dtype, WeightVector",
-    [
-        (np.float32, WeightVector32),
-        (np.float64, WeightVector64),
-    ],
+    [(np.float32, WeightVector32), (np.float64, WeightVector64),],
 )
 def test_type_invariance(dtype, WeightVector):
     """Check the `dtype` consistency of `WeightVector`."""

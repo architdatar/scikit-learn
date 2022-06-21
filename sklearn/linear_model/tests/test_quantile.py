@@ -34,10 +34,7 @@ def X_y_data():
         ({"fit_intercept": "blah"}, "The argument fit_intercept must be bool"),
         ({"fit_intercept": 0}, "The argument fit_intercept must be bool"),
         ({"solver": "blah"}, "Invalid value for argument solver"),
-        (
-            {"solver_options": "blah"},
-            "Invalid value for argument solver_options",
-        ),
+        ({"solver_options": "blah"}, "Invalid value for argument solver_options",),
     ],
 )
 def test_init_parameters_validation(X_y_data, params, err_msg):
@@ -118,9 +115,7 @@ def test_quantile_estimates_calibration(q):
     # Test that model estimates percentage of points below the prediction
     X, y = make_regression(n_samples=1000, n_features=20, random_state=0, noise=1.0)
     quant = QuantileRegressor(
-        quantile=q,
-        alpha=0,
-        solver_options={"lstsq": False},
+        quantile=q, alpha=0, solver_options={"lstsq": False},
     ).fit(X, y)
     assert np.mean(y < quant.predict(X)) == approx(q, abs=1e-2)
 
@@ -151,10 +146,7 @@ def test_asymmetric_error(quantile):
     n_samples = 1000
     rng = np.random.RandomState(42)
     X = np.concatenate(
-        (
-            np.abs(rng.randn(n_samples)[:, None]),
-            -rng.randint(2, size=(n_samples, 1)),
-        ),
+        (np.abs(rng.randn(n_samples)[:, None]), -rng.randint(2, size=(n_samples, 1)),),
         axis=1,
     )
     intercept = 1.23
@@ -168,11 +160,7 @@ def test_asymmetric_error(quantile):
     y = rng.exponential(
         scale=-(X @ coef + intercept) / np.log(1 - quantile), size=n_samples
     )
-    model = QuantileRegressor(
-        quantile=quantile,
-        alpha=0,
-        solver="highs",
-    ).fit(X, y)
+    model = QuantileRegressor(quantile=quantile, alpha=0, solver="highs",).fit(X, y)
     # This test can be made to pass with any solver but in the interest
     # of sparing continuous integration resources, the test is performed
     # with the fastest solver only.

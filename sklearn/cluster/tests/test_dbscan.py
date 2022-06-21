@@ -270,11 +270,7 @@ def test_input_validation():
 
 
 @pytest.mark.parametrize(
-    "args",
-    [
-        {"algorithm": "blah"},
-        {"metric": "blah"},
-    ],
+    "args", [{"algorithm": "blah"}, {"metric": "blah"},],
 )
 def test_dbscan_badargs(args):
     # Test bad argument values: these should all raise ValueErrors
@@ -447,11 +443,7 @@ def test_dbscan_precomputed_metric_with_initial_rows_zero():
         ),
         ({"leaf_size": -3}, ValueError, "leaf_size == -3, must be >= 1."),
         ({"p": -2}, ValueError, "p == -2, must be >= 0.0."),
-        (
-            {"n_jobs": 2.5},
-            TypeError,
-            "n_jobs must be an instance of int, not float.",
-        ),
+        ({"n_jobs": 2.5}, TypeError, "n_jobs must be an instance of int, not float.",),
     ],
 )
 def test_dbscan_params_validation(params, err_type, err_msg):

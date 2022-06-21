@@ -69,9 +69,7 @@ def random_y_true_raw_prediction(
     if loss.is_multiclass:
         raw_prediction = np.empty((n_samples, loss.n_classes))
         raw_prediction.flat[:] = rng.uniform(
-            low=raw_bound[0],
-            high=raw_bound[1],
-            size=n_samples * loss.n_classes,
+            low=raw_bound[0], high=raw_bound[1], size=n_samples * loss.n_classes,
         )
         y_true = np.arange(n_samples).astype(float) % loss.n_classes
     else:
@@ -228,10 +226,10 @@ def test_loss_boundary_y_pred(loss, y_pred_success, y_pred_fail):
         (PinballLoss(quantile=0.25), 5.0, 1.0, 4 * 0.25),
         (HalfPoissonLoss(), 2.0, np.log(4), 4 - 2 * np.log(4)),
         (HalfGammaLoss(), 2.0, np.log(4), np.log(4) + 2 / 4),
-        (HalfTweedieLoss(power=3), 2.0, np.log(4), -1 / 4 + 1 / 4**2),
+        (HalfTweedieLoss(power=3), 2.0, np.log(4), -1 / 4 + 1 / 4 ** 2),
         (HalfTweedieLossIdentity(power=1), 2.0, 4.0, 2 - 2 * np.log(2)),
         (HalfTweedieLossIdentity(power=2), 2.0, 4.0, np.log(2) - 1 / 2),
-        (HalfTweedieLossIdentity(power=3), 2.0, 4.0, -1 / 4 + 1 / 4**2 + 1 / 2 / 2),
+        (HalfTweedieLossIdentity(power=3), 2.0, 4.0, -1 / 4 + 1 / 4 ** 2 + 1 / 2 / 2),
         (HalfBinomialLoss(), 0.25, np.log(4), np.log(5) - 0.25 * np.log(4)),
         (
             HalfMultinomialLoss(n_classes=3),
@@ -358,11 +356,7 @@ def test_loss_dtype(
 def test_loss_same_as_C_functions(loss, sample_weight):
     """Test that Python and Cython functions return same results."""
     y_true, raw_prediction = random_y_true_raw_prediction(
-        loss=loss,
-        n_samples=20,
-        y_bound=(-100, 100),
-        raw_bound=(-10, 10),
-        seed=42,
+        loss=loss, n_samples=20, y_bound=(-100, 100), raw_bound=(-10, 10), seed=42,
     )
     if sample_weight == "range":
         sample_weight = np.linspace(1, y_true.shape[0], num=y_true.shape[0])
@@ -541,27 +535,17 @@ def test_sample_weight_multiplies(loss, sample_weight, global_random_seed):
 
     assert_allclose(
         loss.loss(
-            y_true=y_true,
-            raw_prediction=raw_prediction,
-            sample_weight=sample_weight,
+            y_true=y_true, raw_prediction=raw_prediction, sample_weight=sample_weight,
         ),
         sample_weight
-        * loss.loss(
-            y_true=y_true,
-            raw_prediction=raw_prediction,
-            sample_weight=None,
-        ),
+        * loss.loss(y_true=y_true, raw_prediction=raw_prediction, sample_weight=None,),
     )
 
     losses, gradient = loss.loss_gradient(
-        y_true=y_true,
-        raw_prediction=raw_prediction,
-        sample_weight=None,
+        y_true=y_true, raw_prediction=raw_prediction, sample_weight=None,
     )
     losses_sw, gradient_sw = loss.loss_gradient(
-        y_true=y_true,
-        raw_prediction=raw_prediction,
-        sample_weight=sample_weight,
+        y_true=y_true, raw_prediction=raw_prediction, sample_weight=sample_weight,
     )
     assert_allclose(losses * sample_weight, losses_sw)
     if not loss.is_multiclass:
@@ -570,14 +554,10 @@ def test_sample_weight_multiplies(loss, sample_weight, global_random_seed):
         assert_allclose(gradient * sample_weight[:, None], gradient_sw)
 
     gradient, hessian = loss.gradient_hessian(
-        y_true=y_true,
-        raw_prediction=raw_prediction,
-        sample_weight=None,
+        y_true=y_true, raw_prediction=raw_prediction, sample_weight=None,
     )
     gradient_sw, hessian_sw = loss.gradient_hessian(
-        y_true=y_true,
-        raw_prediction=raw_prediction,
-        sample_weight=sample_weight,
+        y_true=y_true, raw_prediction=raw_prediction, sample_weight=sample_weight,
     )
     if not loss.is_multiclass:
         assert_allclose(gradient * sample_weight, gradient_sw)
@@ -591,11 +571,7 @@ def test_sample_weight_multiplies(loss, sample_weight, global_random_seed):
 def test_graceful_squeezing(loss):
     """Test that reshaped raw_prediction gives same results."""
     y_true, raw_prediction = random_y_true_raw_prediction(
-        loss=loss,
-        n_samples=20,
-        y_bound=(-100, 100),
-        raw_bound=(-10, 10),
-        seed=42,
+        loss=loss, n_samples=20, y_bound=(-100, 100), raw_bound=(-10, 10), seed=42,
     )
 
     if raw_prediction.ndim == 1:
@@ -646,9 +622,7 @@ def test_loss_of_perfect_prediction(loss, sample_weight):
         # raw_prediction with entries -exp(10), but +exp(10) on the diagonal
         # this is close enough to np.inf which would produce nan
         raw_prediction = np.full(
-            shape=(loss.n_classes, loss.n_classes),
-            fill_value=-np.exp(10),
-            dtype=float,
+            shape=(loss.n_classes, loss.n_classes), fill_value=-np.exp(10), dtype=float,
         )
         raw_prediction.flat[:: loss.n_classes + 1] = np.exp(10)
 
@@ -656,9 +630,7 @@ def test_loss_of_perfect_prediction(loss, sample_weight):
         sample_weight = np.linspace(1, y_true.shape[0], num=y_true.shape[0])
 
     loss_value = loss.loss(
-        y_true=y_true,
-        raw_prediction=raw_prediction,
-        sample_weight=sample_weight,
+        y_true=y_true, raw_prediction=raw_prediction, sample_weight=sample_weight,
     )
     constant_term = loss.constant_to_optimal_zero(
         y_true=y_true, sample_weight=sample_weight
@@ -689,9 +661,7 @@ def test_gradients_hessians_numerically(loss, sample_weight, global_random_seed)
         sample_weight = np.linspace(1, y_true.shape[0], num=y_true.shape[0])
 
     g, h = loss.gradient_hessian(
-        y_true=y_true,
-        raw_prediction=raw_prediction,
-        sample_weight=sample_weight,
+        y_true=y_true, raw_prediction=raw_prediction, sample_weight=sample_weight,
     )
 
     assert g.shape == raw_prediction.shape
@@ -701,9 +671,7 @@ def test_gradients_hessians_numerically(loss, sample_weight, global_random_seed)
 
         def loss_func(x):
             return loss.loss(
-                y_true=y_true,
-                raw_prediction=x,
-                sample_weight=sample_weight,
+                y_true=y_true, raw_prediction=x, sample_weight=sample_weight,
             )
 
         g_numeric = numerical_derivative(loss_func, raw_prediction, eps=1e-6)
@@ -711,9 +679,7 @@ def test_gradients_hessians_numerically(loss, sample_weight, global_random_seed)
 
         def grad_func(x):
             return loss.gradient(
-                y_true=y_true,
-                raw_prediction=x,
-                sample_weight=sample_weight,
+                y_true=y_true, raw_prediction=x, sample_weight=sample_weight,
             )
 
         h_numeric = numerical_derivative(grad_func, raw_prediction, eps=1e-6)
@@ -734,9 +700,7 @@ def test_gradients_hessians_numerically(loss, sample_weight, global_random_seed)
                 raw = raw_prediction.copy()
                 raw[:, k] = x
                 return loss.loss(
-                    y_true=y_true,
-                    raw_prediction=raw,
-                    sample_weight=sample_weight,
+                    y_true=y_true, raw_prediction=raw, sample_weight=sample_weight,
                 )
 
             g_numeric = numerical_derivative(loss_func, raw_prediction[:, k], eps=1e-5)
@@ -746,9 +710,7 @@ def test_gradients_hessians_numerically(loss, sample_weight, global_random_seed)
                 raw = raw_prediction.copy()
                 raw[:, k] = x
                 return loss.gradient(
-                    y_true=y_true,
-                    raw_prediction=raw,
-                    sample_weight=sample_weight,
+                    y_true=y_true, raw_prediction=raw, sample_weight=sample_weight,
                 )[:, k]
 
             h_numeric = numerical_derivative(grad_func, raw_prediction[:, k], eps=1e-6)
@@ -806,12 +768,7 @@ def test_derivatives(loss, x0, y_true):
         return loss.gradient_hessian(y_true=y_true, raw_prediction=x)[1]
 
     optimum = newton(
-        func,
-        x0=x0,
-        fprime=fprime,
-        fprime2=fprime2,
-        maxiter=100,
-        tol=5e-8,
+        func, x0=x0, fprime=fprime, fprime2=fprime2, maxiter=100, tol=5e-8,
     )
 
     # Need to ravel arrays because assert_allclose requires matching
@@ -851,9 +808,7 @@ def test_loss_intercept_only(loss, sample_weight):
                 np.broadcast_to(x, shape=(n_samples, loss.n_classes))
             )
         return loss(
-            y_true=y_true,
-            raw_prediction=raw_prediction,
-            sample_weight=sample_weight,
+            y_true=y_true, raw_prediction=raw_prediction, sample_weight=sample_weight,
         )
 
     if not loss.is_multiclass:
@@ -1032,9 +987,7 @@ def test_init_gradient_and_hessians(loss, sample_weight, dtype, order):
         sample_weight = np.ones(n_samples)
     loss = loss(sample_weight=sample_weight)
     gradient, hessian = loss.init_gradient_and_hessian(
-        n_samples=n_samples,
-        dtype=dtype,
-        order=order,
+        n_samples=n_samples, dtype=dtype, order=order,
     )
     if loss.constant_hessian:
         assert gradient.shape == (n_samples,)
@@ -1083,12 +1036,7 @@ def test_init_gradient_and_hessian_raises(loss, params, err_msg):
             TypeError,
             "quantile must be an instance of float, not NoneType.",
         ),
-        (
-            PinballLoss,
-            {"quantile": 0},
-            ValueError,
-            "quantile == 0, must be > 0.",
-        ),
+        (PinballLoss, {"quantile": 0}, ValueError, "quantile == 0, must be > 0.",),
         (PinballLoss, {"quantile": 1.1}, ValueError, "quantile == 1.1, must be < 1."),
         (
             HalfTweedieLoss,
@@ -1115,11 +1063,7 @@ def test_loss_pickle(loss):
     """Test that losses can be pickled."""
     n_samples = 20
     y_true, raw_prediction = random_y_true_raw_prediction(
-        loss=loss,
-        n_samples=n_samples,
-        y_bound=(-100, 100),
-        raw_bound=(-5, 5),
-        seed=42,
+        loss=loss, n_samples=n_samples, y_bound=(-100, 100), raw_bound=(-5, 5), seed=42,
     )
     pickled_loss = pickle.dumps(loss)
     unpickled_loss = pickle.loads(pickled_loss)
@@ -1169,5 +1113,5 @@ def test_tweedie_log_identity_consistency(p):
     )
     assert_allclose(gradient_log, y_pred * gradient_identity)
     assert_allclose(
-        hessian_log, y_pred * gradient_identity + y_pred**2 * hessian_identity
+        hessian_log, y_pred * gradient_identity + y_pred ** 2 * hessian_identity
     )

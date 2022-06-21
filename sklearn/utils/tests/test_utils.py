@@ -579,9 +579,7 @@ def test_get_chunk_n_rows(row_bytes, max_n_rows, working_memory, expected, warn_
     warning = None if warn_msg is None else UserWarning
     with pytest.warns(warning, match=warn_msg) as w:
         actual = get_chunk_n_rows(
-            row_bytes=row_bytes,
-            max_n_rows=max_n_rows,
-            working_memory=working_memory,
+            row_bytes=row_bytes, max_n_rows=max_n_rows, working_memory=working_memory,
         )
 
     assert actual == expected
@@ -609,12 +607,7 @@ def test_get_chunk_n_rows(row_bytes, max_n_rows, working_memory, expected, warn_
 )
 @pytest.mark.parametrize(
     ["time", "time_str"],
-    [
-        (0.2, "   0.2s"),
-        (20, "  20.0s"),
-        (2000, "33.3min"),
-        (20000, "333.3min"),
-    ],
+    [(0.2, "   0.2s"), (20, "  20.0s"), (2000, "33.3min"), (20000, "333.3min"),],
 )
 def test_message_with_time(source, message, is_long, time, time_str):
     out = _message_with_time(source, message, time)

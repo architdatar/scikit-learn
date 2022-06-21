@@ -180,10 +180,7 @@ class _GeneralizedLinearRegressor(RegressorMixin, BaseEstimator):
             )
         solver = self.solver
         check_scalar(
-            self.max_iter,
-            name="max_iter",
-            target_type=numbers.Integral,
-            min_val=1,
+            self.max_iter, name="max_iter", target_type=numbers.Integral, min_val=1,
         )
         check_scalar(
             self.tol,
@@ -193,10 +190,7 @@ class _GeneralizedLinearRegressor(RegressorMixin, BaseEstimator):
             include_boundaries="neither",
         )
         check_scalar(
-            self.verbose,
-            name="verbose",
-            target_type=numbers.Integral,
-            min_val=0,
+            self.verbose, name="verbose", target_type=numbers.Integral, min_val=0,
         )
         if not isinstance(self.warm_start, bool):
             raise ValueError(
@@ -231,8 +225,7 @@ class _GeneralizedLinearRegressor(RegressorMixin, BaseEstimator):
         self._base_loss = self._get_loss()
 
         self._linear_loss = LinearModelLoss(
-            base_loss=self._base_loss,
-            fit_intercept=self.fit_intercept,
+            base_loss=self._base_loss, fit_intercept=self.fit_intercept,
         )
 
         if not self._linear_loss.base_loss.in_y_true_range(y):

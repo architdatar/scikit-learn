@@ -477,11 +477,7 @@ def test_scale_and_stability(Est, X, Y):
     [
         (0, ValueError, "n_components == 0, must be >= 1."),
         (4, ValueError, "n_components == 4, must be <= 3."),
-        (
-            2.0,
-            TypeError,
-            "n_components must be an instance of int",
-        ),
+        (2.0, TypeError, "n_components must be an instance of int",),
     ],
 )
 def test_n_components_bounds(Est, n_components, err_type, err_msg):
@@ -499,11 +495,7 @@ def test_n_components_bounds(Est, n_components, err_type, err_msg):
     [
         (0, ValueError, "n_components == 0, must be >= 1."),
         (6, ValueError, "n_components == 6, must be <= 5."),
-        (
-            2.0,
-            TypeError,
-            "n_components must be an instance of int",
-        ),
+        (2.0, TypeError, "n_components must be an instance of int",),
     ],
 )
 def test_n_components_bounds_pls_regression(n_components, err_type, err_msg):

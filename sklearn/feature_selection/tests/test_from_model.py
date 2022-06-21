@@ -65,11 +65,7 @@ def test_input_estimator_unchanged():
     "max_features, err_type, err_msg",
     [
         (-1, ValueError, "max_features =="),
-        (
-            data.shape[1] + 1,
-            ValueError,
-            "max_features ==",
-        ),
+        (data.shape[1] + 1, ValueError, "max_features ==",),
         (
             lambda X: 1.5,
             TypeError,
@@ -80,11 +76,7 @@ def test_input_estimator_unchanged():
             TypeError,
             "'max_features' must be either an int or a callable",
         ),
-        (
-            "all",
-            TypeError,
-            "'max_features' must be either an int or a callable",
-        ),
+        ("all", TypeError, "'max_features' must be either an int or a callable",),
     ],
 )
 def test_max_features_error(max_features, err_type, err_msg):

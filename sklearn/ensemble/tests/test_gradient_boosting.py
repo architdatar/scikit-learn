@@ -87,30 +87,18 @@ def test_classification_toy(loss):
             "learning_rate must be an instance of float",
         ),
         ({"n_estimators": 0}, ValueError, "n_estimators == 0, must be >= 1"),
-        (
-            {"n_estimators": 1.5},
-            TypeError,
-            "n_estimators must be an instance of int,",
-        ),
+        ({"n_estimators": 1.5}, TypeError, "n_estimators must be an instance of int,",),
         ({"loss": "foobar"}, ValueError, "Loss 'foobar' not supported"),
         ({"subsample": 0.0}, ValueError, "subsample == 0.0, must be > 0.0"),
         ({"subsample": 1.1}, ValueError, "subsample == 1.1, must be <= 1.0"),
-        (
-            {"subsample": "foo"},
-            TypeError,
-            "subsample must be an instance of float",
-        ),
+        ({"subsample": "foo"}, TypeError, "subsample must be an instance of float",),
         ({"init": {}}, ValueError, "The init parameter must be an estimator or 'zero'"),
         ({"max_features": 0}, ValueError, "max_features == 0, must be >= 1"),
         ({"max_features": 0.0}, ValueError, "max_features == 0.0, must be > 0.0"),
         ({"max_features": 1.1}, ValueError, "max_features == 1.1, must be <= 1.0"),
         ({"max_features": "foobar"}, ValueError, "Invalid value for max_features."),
         ({"verbose": -1}, ValueError, "verbose == -1, must be >= 0"),
-        (
-            {"verbose": "foo"},
-            TypeError,
-            "verbose must be an instance of",
-        ),
+        ({"verbose": "foo"}, TypeError, "verbose must be an instance of",),
         ({"warm_start": "foo"}, TypeError, "warm_start must be an instance of"),
         (
             {"validation_fraction": 0.0},
@@ -134,11 +122,7 @@ def test_classification_toy(loss):
             "n_iter_no_change must be an instance of int,",
         ),
         ({"tol": 0.0}, ValueError, "tol == 0.0, must be > 0.0"),
-        (
-            {"tol": "foo"},
-            TypeError,
-            "tol must be an instance of float,",
-        ),
+        ({"tol": "foo"}, TypeError, "tol must be an instance of float,",),
         # The following parameters are checked in BaseDecisionTree
         ({"min_samples_leaf": 0}, ValueError, "min_samples_leaf == 0, must be >= 1"),
         ({"min_samples_leaf": 0.0}, ValueError, "min_samples_leaf == 0.0, must be > 0"),
@@ -185,11 +169,7 @@ def test_classification_toy(loss):
             "max_leaf_nodes must be an instance of int",
         ),
         ({"max_depth": -1}, ValueError, "max_depth == -1, must be >= 1"),
-        (
-            {"max_depth": 1.1},
-            TypeError,
-            "max_depth must be an instance of int",
-        ),
+        ({"max_depth": 1.1}, TypeError, "max_depth must be an instance of int",),
         (
             {"min_impurity_decrease": -1},
             ValueError,
@@ -201,11 +181,7 @@ def test_classification_toy(loss):
             "min_impurity_decrease must be an instance of float",
         ),
         ({"ccp_alpha": -1.0}, ValueError, "ccp_alpha == -1.0, must be >= 0.0"),
-        (
-            {"ccp_alpha": "foo"},
-            TypeError,
-            "ccp_alpha must be an instance of float",
-        ),
+        ({"ccp_alpha": "foo"}, TypeError, "ccp_alpha must be an instance of float",),
         ({"criterion": "mae"}, ValueError, "criterion='mae' is not supported."),
     ],
     # Avoid long error messages in test names:
@@ -1518,11 +1494,7 @@ def test_criterion_mse_deprecated(Estimator):
 
 # TODO: Remove in v1.2
 @pytest.mark.parametrize(
-    "old_loss, new_loss",
-    [
-        ("ls", "squared_error"),
-        ("lad", "absolute_error"),
-    ],
+    "old_loss, new_loss", [("ls", "squared_error"), ("lad", "absolute_error"),],
 )
 def test_loss_deprecated(old_loss, new_loss):
     est1 = GradientBoostingRegressor(loss=old_loss, random_state=0)
